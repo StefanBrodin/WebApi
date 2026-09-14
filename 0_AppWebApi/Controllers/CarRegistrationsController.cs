@@ -6,7 +6,7 @@ using Models;
 namespace AppWebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]/[action]")]
 public class CarRegistrationsController : ControllerBase
 {
     private readonly ICarsService _carsService;
@@ -16,8 +16,8 @@ public class CarRegistrationsController : ControllerBase
         _carsService = carsService;
     }
 
-    [HttpGet(Name = "GetCarRegistration")] 
-    public IEnumerable<Car> Get()
+    [HttpGet(Name = "GetCarRegistrations")] 
+    public IEnumerable<Car> GetCarRegistrations()
     {
         return _carsService.GetCars();
     }

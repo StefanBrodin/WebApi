@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "",
+    "appService.deploySubpath": "0_AppWebApi/bin/Release/net10.0/publish"
+}

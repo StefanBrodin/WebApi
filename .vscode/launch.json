@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "WebApi",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // Path to the .NET Core DLL to launch.
+            "program": "${workspaceFolder}/0_AppWebApi/bin/Debug/net10.0/0_AppWebApi.dll",
+            "args": [],
+            // Path to the project folder.
+            "cwd": "${workspaceFolder}/0_AppWebApi",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/weatherforecast"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/0_AppWebApi/Views"
+            }
+        }
+    ]
+}

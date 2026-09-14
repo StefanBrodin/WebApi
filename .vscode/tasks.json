@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                // Det går utmärkt att bygga hela solutionen (.slnx stöds i .NET 10)
+                "${workspaceFolder}/WebApi.slnx",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                // Ändrad till ditt faktiska API-projekt eftersom du bara vill publicera själva appen
+                "${workspaceFolder}/0_AppWebApi/0_AppWebApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                // FIX: Point to the actual project to run/watch, not the solution file
+                "--project",
+                "${workspaceFolder}/0_AppWebApi/0_AppWebApi.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
