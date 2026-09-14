@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                // Det går utmärkt att bygga hela solutionen (.slnx stöds i .NET 10)
+                // Works with the solution file, but also possible to point to the specific project 
                 "${workspaceFolder}/WebApi.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
@@ -20,7 +20,7 @@
             "type": "process",
             "args": [
                 "publish",
-                // Ändrad till ditt faktiska API-projekt eftersom du bara vill publicera själva appen
+                // Point to the specific project to publish, not the solution file
                 "${workspaceFolder}/0_AppWebApi/0_AppWebApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
