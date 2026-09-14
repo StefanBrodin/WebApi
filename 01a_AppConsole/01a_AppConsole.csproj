@@ -8,4 +8,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\02_Services\02_Services.csproj" />
+    <ProjectReference Include="..\03_Data\03_Data.csproj" />
+    <ProjectReference Include="..\04_Models\04_Models.csproj" />
+    <ProjectReference Include="..\05_Configuration\05_Configuration.csproj" />
+  </ItemGroup>
+
 </Project>

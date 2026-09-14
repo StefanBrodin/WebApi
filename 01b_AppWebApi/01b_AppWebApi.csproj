@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.19" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+
+    <ProjectReference Include="..\02_Services\02_Services.csproj" />
+    <ProjectReference Include="..\03_Data\03_Data.csproj" />
+    <ProjectReference Include="..\04_Models\04_Models.csproj" />
+    <ProjectReference Include="..\05_Configuration\05_Configuration.csproj" />
+
   </ItemGroup>
 
 </Project>
