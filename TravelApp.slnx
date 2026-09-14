@@ -1,8 +1,0 @@
-<Solution>
-  <Project Path="01a_AppConsole/01a_AppConsole.csproj" />
-  <Project Path="01b_AppWebApi/01b_AppWebApi.csproj" />
-  <Project Path="02_Services/02_Services.csproj" />
-  <Project Path="03_Data/03_Data.csproj" />
-  <Project Path="04_Models/04_Models.csproj" />
-  <Project Path="05_Configuration/05_Configuration.csproj" />
-</Solution>

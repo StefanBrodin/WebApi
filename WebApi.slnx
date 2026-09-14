@@ -1,0 +1,9 @@
+<Solution>
+    <Project Path="0_AppWebApi\0_AppWebApi.csproj" />
+    <Project Path="1_Services\1_Services.csproj" />
+    <Project Path="2a_DbRepos\2a_DbRepos.csproj" />
+    <Project Path="2b_DbContext\2b_DbContext.csproj" />
+    <Project Path="2c_DbModels\2c_DbModels.csproj" />
+    <Project Path="3_Models\3_Models.csproj" />
+    <Project Path="4_Configuration\4_Configuration.csproj" />
+</Solution>

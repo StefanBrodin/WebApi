@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <RootNamespace>AppWebApi</RootNamespace> <!-- The root namespace for the project, ordering numbers in files/folders removed -->
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable> <!-- Values can never be null, unless explicitly allowed -->
+  </PropertyGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\1_Services\1_Services.csproj" />
+      <ProjectReference Include="..\3_Models\3_Models.csproj" />
+      <ProjectReference Include="..\4_Configuration\4_Configuration.csproj" />
+  </ItemGroup>
+
+</Project>
