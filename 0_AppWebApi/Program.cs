@@ -3,13 +3,24 @@ using Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<ICarsService, CarsService>();
+
+
+// NOTE: global cors policy needed for JS and React frontends
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -24,7 +35,9 @@ builder.Services.AddSwaggerGen(c =>
 #else
         Version = "v1.0",
 #endif
-        Description = "This is the Swagger/OpenAPI documentation for the \"Attraction Vote\" API by Stefan Brodin. It provides information about the available endpoints, request/response formats, and authentication requirements.",
+        Description = "This is the Swagger/OpenAPI documentation for the \"Attraction Vote\" API by Stefan Brodin. It provides information about the available endpoints, request/response formats, and authentication requirements."
+        + $"<br>DataSet: {builder.Configuration["DatabaseConnections:UseDataSetWithTag"]}"
+        + $"<br>DefaultDataUser: {builder.Configuration["DatabaseConnections:DefaultDataUser"]}"
     });
 });
 
@@ -43,6 +56,7 @@ var app = builder.Build();
 }
 
 app.UseHttpsRedirection();
+app.UseCors(); 
 
 app.UseAuthorization();
 

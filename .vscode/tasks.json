@@ -7,7 +7,6 @@
             "type": "process",
             "args": [
                 "build",
-                // Works with the solution file, but also possible to point to the specific project 
                 "${workspaceFolder}/WebApi.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
@@ -20,8 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                // Point to the specific project to publish, not the solution file
-                "${workspaceFolder}/0_AppWebApi/0_AppWebApi.csproj",
+                "${workspaceFolder}/WebApi.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -34,9 +32,8 @@
             "args": [
                 "watch",
                 "run",
-                // FIX: Point to the actual project to run/watch, not the solution file
                 "--project",
-                "${workspaceFolder}/0_AppWebApi/0_AppWebApi.csproj"
+                "${workspaceFolder}/WebApi.sln"
             ],
             "problemMatcher": "$msCompile"
         }
