@@ -9,7 +9,7 @@ using Configuration.Options;
 using Microsoft.Extensions.Options;
 using Seido.Utilities.SeedGenerator;
 
-using AppWebApi.Models;
+using Models;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -178,6 +178,7 @@ namespace AppWebApi.Controllers
         {
             try
             {
+                _logger.LogInformation($"{nameof(Version)}");
                 return Ok(_versionOptions);
             }
             catch (Exception ex)
@@ -197,7 +198,6 @@ namespace AppWebApi.Controllers
             try
             {
                 _logger.LogInformation($"{nameof(Quotes)}");
-
                 var quotes = new SeedGenerator().AllQuotes
                     .Select(goodQuote => new Quote(goodQuote))
                     .ToList<IQuote>();
@@ -272,7 +272,9 @@ namespace AppWebApi.Controllers
         }
 
 
-        public AdminController(Encryptions encryptions, DatabaseConnections dbConnections, ILogger<AdminController> logger,
+        public AdminController(Encryptions encryptions, 
+                    DatabaseConnections dbConnections, 
+                    ILogger<AdminController> logger,
                     IConfiguration configuration,
                     IOptions<DbConnectionSetsOptions> dbSetOptions,
                     IOptions<AesEncryptionOptions> aesOptions,
