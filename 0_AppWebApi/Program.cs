@@ -1,4 +1,4 @@
-//using Services;
+using Services;
 using Configuration;
 using Configuration.Options;
 
@@ -85,6 +85,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Inject Services
+builder.Services.AddScoped<IAdminService, AdminServiceDb>();
 
 var app = builder.Build();
 
