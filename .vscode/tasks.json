@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/WebApi.sln"
+                "${workspaceFolder}/WebApi.slnx"
             ],
             "problemMatcher": "$msCompile"
         }

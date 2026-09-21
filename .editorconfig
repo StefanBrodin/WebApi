@@ -1,0 +1,5 @@
+# This file is used by Code Analysis to determine the coding styles and rules for the project.
+[*.cs]
+
+# Require accessibility modifiers for all types and members
+dotnet_style_require_accessibility_modifiers = always:warning

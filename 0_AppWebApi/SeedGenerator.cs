@@ -28,7 +28,7 @@ namespace Seido.Utilities.SeedGenerator
 
     public class SeedGenerator : Random
     {
-        readonly SeedJsonContent _seeds = null;
+        private readonly SeedJsonContent _seeds = null;
 
         #region Names
         public string PetName => _seeds.Names.PetNames[this.Next(0, _seeds.Names.PetNames.Count)];
@@ -329,9 +329,9 @@ namespace Seido.Utilities.SeedGenerator
             return retList;
         }
         #endregion
- 
+
         #region initialize master content
-        SeedJsonContent CreateMasterSeedFile()
+        private SeedJsonContent CreateMasterSeedFile()
         {
             return new SeedJsonContent()
             {
@@ -613,10 +613,10 @@ namespace Seido.Utilities.SeedGenerator
         #endregion
 
         #region internal classes
-        class SeedLatin
+        private class SeedLatin
         {
             #region Latin towards json file
-            string _jsonParagraph;
+            private string _jsonParagraph;
             public string jsonParagraph
             {
                 get => _jsonParagraph;
@@ -639,21 +639,21 @@ namespace Seido.Utilities.SeedGenerator
             [JsonIgnore]
             public string Paragraph => _jsonParagraph;
 
-            List<string> _sentences;
+            private List<string> _sentences;
             [JsonIgnore]
             public List<string> Sentences => _sentences;
 
-            List<string> _words;
+            private List<string> _words;
             [JsonIgnore]
             public List<string> Words => _words;
         }
-        class SeedQuote
+        private class SeedQuote
         {
             #region Quotes towards json file
-            string _jsonQuote;
+            private string _jsonQuote;
             public string jsonQuote { get => _jsonQuote; set => _jsonQuote = value; }
 
-            string _jsonAuthor;
+            private string _jsonAuthor;
             public string jsonAuthor { get => _jsonAuthor; set => _jsonAuthor = value; }
             #endregion
 
@@ -662,10 +662,10 @@ namespace Seido.Utilities.SeedGenerator
             [JsonIgnore]
             public string Author => _jsonAuthor;
         }
-        class SeedAddress
+        private class SeedAddress
         {
             #region Country towards json file
-            string _jsonCountry;
+            private string _jsonCountry;
             public string jsonCountry { get => _jsonCountry; set { _jsonCountry = value; }}
             #endregion
 
@@ -673,7 +673,7 @@ namespace Seido.Utilities.SeedGenerator
             public string Country => _jsonCountry;
 
             #region Streets towards json file
-            string _jsonStreets;
+            private string _jsonStreets;
             public string jsonStreets
             {
                 get => _jsonStreets;
@@ -685,12 +685,12 @@ namespace Seido.Utilities.SeedGenerator
             }
             #endregion
 
-            List<string> _streets;
+            private List<string> _streets;
             [JsonIgnore]
             public List<string> Streets => _streets;
 
             #region Cities towards json file
-            string _jsonCities;
+            private string _jsonCities;
             public string jsonCities
             {
                 get => _jsonCities;
@@ -702,14 +702,14 @@ namespace Seido.Utilities.SeedGenerator
             }
             #endregion
 
-            List<string> _cities;
+            private List<string> _cities;
             [JsonIgnore]
             public List<string> Cities => _cities;
         }
-        class SeedNames
+        private class SeedNames
         {
             #region Names towards json file
-            string _jsonFirstNames;
+            private string _jsonFirstNames;
             public string jsonFirstNames
             {
                 get => _jsonFirstNames;
@@ -720,7 +720,7 @@ namespace Seido.Utilities.SeedGenerator
                 }
             }
 
-            string _jsonLastNames;
+            private string _jsonLastNames;
             public string jsonLastNames
             {
                 get => _jsonLastNames;
@@ -731,7 +731,7 @@ namespace Seido.Utilities.SeedGenerator
                 }
             }
 
-            string _jsonPetNames;
+            private string _jsonPetNames;
             public string jsonPetNames
             {
                 get => _jsonPetNames;
@@ -743,22 +743,22 @@ namespace Seido.Utilities.SeedGenerator
             }
             #endregion
 
-            List<string> _firstNames;
+            private List<string> _firstNames;
             [JsonIgnore]
             public List<string> FirstNames => _firstNames;
 
-            List<string> _lastNames;
+            private List<string> _lastNames;
             [JsonIgnore]
             public List<string> LastNames => _lastNames;
 
-            List<string> _petNames;
+            private List<string> _petNames;
             [JsonIgnore]
             public List<string> PetNames => _petNames;
         }
-        class SeedDomains
+        private class SeedDomains
         {
             #region Domains towards json file
-            string _jsonDomainNames;
+            private string _jsonDomainNames;
             public string jsonDomainNames
             {
                 get => _jsonDomainNames;
@@ -770,14 +770,14 @@ namespace Seido.Utilities.SeedGenerator
             }
             #endregion
 
-            List<string> _domainNames;
+            private List<string> _domainNames;
             [JsonIgnore]
             public List<string> Domains => _domainNames;
         }
-        class SeedMusic
+        private class SeedMusic
         {
             #region Music towards json file
-            string _jsonGroupNames;
+            private string _jsonGroupNames;
             public string jsonGroupNames
             {
                 get => _jsonGroupNames;
@@ -788,7 +788,7 @@ namespace Seido.Utilities.SeedGenerator
                 }
             }
 
-            string _jsonAlbumNames;
+            private string _jsonAlbumNames;
             public string jsonAlbumNames
             {
                 get => _jsonAlbumNames;
@@ -799,7 +799,7 @@ namespace Seido.Utilities.SeedGenerator
                 }
             }
 
-            string _jsonAlbumPrefix;
+            private string _jsonAlbumPrefix;
             public string jsonAlbumPrefix
             {
                 get => _jsonAlbumPrefix;
@@ -810,7 +810,7 @@ namespace Seido.Utilities.SeedGenerator
                 }
             }
 
-            string _jsonAlbumSuffix;
+            private string _jsonAlbumSuffix;
             public string jsonAlbumSuffix
             {
                 get => _jsonAlbumSuffix;
@@ -822,24 +822,24 @@ namespace Seido.Utilities.SeedGenerator
             }
             #endregion
 
-            List<string> _groupNames;
+            private List<string> _groupNames;
             [JsonIgnore]
             public List<string> GroupNames => _groupNames;
 
-            List<string> _albumNames;
+            private List<string> _albumNames;
             [JsonIgnore]
             public List<string> AlbumNames => _albumNames;
 
-            List<string> _albumPrefix;
+            private List<string> _albumPrefix;
             [JsonIgnore]
             public List<string> AlbumPrefix => _albumPrefix;
 
-            List<string> _albumSuffix;
+            private List<string> _albumSuffix;
             [JsonIgnore]
             public List<string> AlbumSuffix => _albumSuffix;
         }
 
-        class SeedJsonContent
+        private class SeedJsonContent
         {
             public List<SeedQuote> Quotes { get; set; } = new List<SeedQuote>();
             public List<SeedLatin> Latin { get; set; } = new List<SeedLatin>();
@@ -873,7 +873,7 @@ namespace Seido.Utilities.SeedGenerator
                 return seeds;
             }
 
-            static string fname(string name)
+            private static string fname(string name)
             {
                 var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 documentPath = Path.Combine(documentPath, "SeedGenerator");

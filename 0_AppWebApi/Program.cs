@@ -1,9 +1,8 @@
-// using Services;
+//using Services;
+using Configuration;
 using Configuration.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 
 // NOTE: global cors policy needed for JS and React frontends
@@ -36,6 +35,9 @@ builder.Configuration.SetBasePath(Path.Combine(currentDir, "../0_AppWebApi"))
 builder.Services.Configure<AesEncryptionOptions>(
     options => builder.Configuration.GetSection(AesEncryptionOptions.Position).Bind(options));
 
+// Registering encryption service
+builder.Services.AddTransient<Encryptions>();
+
 builder.Services.Configure<JwtOptions>(
     options => builder.Configuration.GetSection(JwtOptions.Position).Bind(options));
 
@@ -43,9 +45,22 @@ builder.Services.Configure<JwtOptions>(
 builder.Services.Configure<DbConnectionSetsOptions>(
     options => builder.Configuration.GetSection(DbConnectionSetsOptions.Position).Bind(options));
 
+// Registering database connections service
+builder.Services.AddSingleton<DatabaseConnections>();
+
 // adding version info
 builder.Services.Configure<VersionOptions>(options =>VersionOptions.ReadFromAssembly(options));
+
+//Inject Custom logger, this will also register the InMemoryLoggerProvider logger
+//hence, AddLogging should not be used here
+builder.Services.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
+
 #endregion
+
+
+
+// Add services to the container.
+
 
 
 // // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
