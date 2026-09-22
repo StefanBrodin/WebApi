@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+
+
 using Services;
+using DbContext;
+using DbRepos;
 using Configuration;
 using Configuration.Options;
 
@@ -55,6 +60,26 @@ builder.Services.Configure<VersionOptions>(options =>VersionOptions.ReadFromAsse
 //hence, AddLogging should not be used here
 builder.Services.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
 
+// adding DbContexts
+builder.Services.AddDbContext<MainDbContext>(options =>
+{
+    // SQLSERVER
+    //var connectionString = builder.Configuration["ConnectionStrings:SqlServerDocker"];  //alternative to below
+    var connectionString = builder.Configuration.GetConnectionString("SqlServerDocker");
+    options.UseSqlServer(connectionString, options => options.EnableRetryOnFailure());
+    // SQLSERVER END
+
+    // MYSQL
+//    var connectionString = builder.Configuration.GetConnectionString("MySqlDocker");
+//    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+//      b => b.SchemaBehavior(Microting.EntityFrameworkCore.MySql.Infrastructure.MySqlSchemaBehavior.Translate, (schema, table) => $"{schema}_{table}"));
+    // MYSQL END
+
+    // POSTGRESQL
+//    var connectionString = builder.Configuration.GetConnectionString("PostgreSqlDocker");
+//    options.UseNpgsql(connectionString);
+    // POSTGRESQL END
+});
 #endregion
 
 
@@ -85,7 +110,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-//Inject Services
+//Inject DbRepos and Services
+builder.Services.AddScoped<AdminDbRepos>();
+
 builder.Services.AddScoped<IAdminService, AdminServiceDb>();
 
 var app = builder.Build();
