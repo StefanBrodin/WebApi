@@ -30,26 +30,6 @@ namespace AppWebApi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAdminService _service;
 
-
-        //GET: api/admin/connectionstring
-        [HttpGet()]
-        [ActionName("ConnectionString")]
-        [ProducesResponseType(200, Type = typeof(string))]
-        public IActionResult ConnectionString()
-        {
-            try
-            {
-                var connectionString = _configuration.GetConnectionString("SqlServerDocker");
-
-                _logger.LogInformation($"{nameof(ConnectionString)}:\n{JsonConvert.SerializeObject(connectionString)}");
-                return Ok(connectionString);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{nameof(ConnectionString)}: {ex.Message}");
-                return BadRequest(ex.Message);
-            }
-        }
         
         //GET: api/admin/environment
         [HttpGet()]
@@ -95,14 +75,14 @@ namespace AppWebApi.Controllers
         [ActionName("Seed")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> Seed()
+       public async Task<IActionResult> Seed(int nrItems = 10)
         {
             try
             {
                 _logger.LogInformation($"{nameof(Seed)}");
-                await _service.SeedAsync();
+                await _service.SeedAsync(nrItems);
 
-                return Ok("Seeding completed successfully");
+                return Ok($"Seeded {nrItems} items successfully");
             }
             catch (Exception ex)
             {

@@ -1,0 +1,90 @@
+﻿In Visual Studio *Code* open a terminal in DbContext project.
+
+
+Visual Studio Code to drop the Database.
+----------------------------------------------------------------------------
+In the terminal, type below commands. After each committment you will get a success confirmation
+SQLServer:
+dotnet ef database drop -f --context SqlServerDbContext
+
+MariaDb:
+dotnet ef database drop -f --context MySqlDbContext
+
+Postgres:
+dotnet ef database drop -f --context PostgresDbContext
+
+
+
+Visual Studio *Code* Database migrations.
+--------------------------------
+in the terminal, type below commands. After each migration you will get a success confirmation from EFC.
+Use command depending on your database.
+
+sqlserver:
+dotnet ef migrations add initial_migration --context SqlServerDbContext --output-dir Migrations/SqlServerDbContext
+
+MariaDb:
+dotnet ef migrations add initial_migration --context mysqlDbContext --output-dir Migrations/mysqlMigrations
+
+Postgres:
+dotnet ef migrations add initial_migration --context PostgresDbContext --output-dir Migrations/PostgresMigrations
+
+SQLite:
+dotnet ef migrations add initial_migration --context SqliteDbContext --output-dir Migrations/SqliteMigrations
+
+
+
+Visual Studio *Code* Commit the migrations to the Database (create or update the databases).
+----------------------------------------------------------------------------
+in the terminal, type below commands. After each committment you will get a success confirmation
+sqlserver:
+dotnet ef database update --context SqlServerDbContext
+
+MariaDb:
+dotnet ef database update --context mysqlDbContext
+
+Postgres:
+dotnet ef database update --context PostgresDbContext
+
+SQLite:
+dotnet ef database update --context SqliteDbContext
+
+
+
+All 3 steps above
+-----------------
+
+sqlserver:
+Remember to switch to "sql-friends.mysql.docker" in appsettings.json, then copy/paste: 
+
+dotnet ef database drop -f --context SqlServerDbContext
+dotnet ef migrations add initial_migration --context SqlServerDbContext --output-dir Migrations/SqlServerDbContext
+dotnet ef database update --context SqlServerDbContext
+
+MariaDb:
+Remember to switch to "sql-friends.mysql.docker" in appsettings.json, then copy/paste: 
+
+dotnet ef database drop -f --context MySqlDbContext
+dotnet ef migrations add initial_migration --context MySqlDbContext --output-dir Migrations/MySqlDbContext
+dotnet ef database update --context MySqlDbContext
+
+Postgres:
+Remember to switch to "sql-friends.postgresql.docker" in appsettings.json, then copy/paste: 
+
+dotnet ef database drop -f --context PostgresDbContext
+dotnet ef migrations add initial_migration --context PostgresDbContext --output-dir Migrations/PostgresDbContext
+dotnet ef database update --context PostgresDbContext
+
+
+Visual Studio *Code* to remove latest migration, e.g. empty migration, that is NOT updated to Database
+----------------------------------------------------------------------------
+
+dotnet ef migrations remove --context SqlServerDbContext
+
+
+Visual Studio *Code* revert Database to a specific migration
+-------------------------------------------------
+dotnet ef database update <target_migration> --context SqlServerDbContext
+
+example:
+dotnet ef database update fk_migration6 --context SqlServerDbContext

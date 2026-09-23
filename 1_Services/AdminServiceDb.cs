@@ -6,10 +6,10 @@ namespace Services;
     
 public class AdminServiceDb : IAdminService
 {
-    private readonly AdminDbRepos _repo = null;
-    private readonly ILogger<AdminServiceDb> _logger = null;
+    private readonly AdminDbRepos _repo;
+    private readonly ILogger<AdminServiceDb> _logger;
 
-    public Task SeedAsync() => _repo.SeedAsync();
+    public Task SeedAsync(int nrItems) => _repo.SeedAsync(nrItems);
 
     #region constructors
     public AdminServiceDb(AdminDbRepos repo)

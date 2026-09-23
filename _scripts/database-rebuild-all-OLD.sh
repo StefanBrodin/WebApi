@@ -1,7 +1,4 @@
 #!/bin/bash
-
-# Updated for this solution's project/folder naming ("2b_DbContext"). Hopefully I got it right (I don't have a Mac, couldn't test it)!
-
 #To make the .sh file executable
 #sudo chmod +x ./database-rebuild-all.sh
 
@@ -12,7 +9,7 @@
 # ./database-rebuild-all.sh databasename [sqlserver|mysql|postgresql] [docker|azure] [root|dbo|supusr|usr|gstusr] [appsettingsFolder]
 
 # example:
-# ./database-rebuild-all.sh sql-friends sqlserver docker root ../0_AppWebApi
+# ./database-rebuild-all.sh sql-friends sqlserver docker dbo ../AppWebApi
 # ./database-rebuild-all.sh sql-friends sqlserver docker dbo ../AppRazor
 # ./database-rebuild-all.sh sql-friends sqlserver docker dbo ../AppMvc
 
@@ -66,20 +63,20 @@ sed -i '' 's/"DefaultDataUser":[[:space:]]*"[^"]*"/"DefaultDataUser": "'$4'"/g' 
 if [[ $3 == "docker" ]]; then
     #drop any database
     export EFC_AppSettingsFolder="$AppSettingsFolder"
-    dotnet ef database drop -f -c $DBContext -p ../2b_DbContext -s ../2b_DbContext
+    dotnet ef database drop -f -c $DBContext -p ../DbContext -s ../DbContext
 fi
 
 #remove any migration
-rm -rf "../2b_DbContext/Migrations/$DBContext"
+rm -rf ../DbContext/Migrations/$DBContext
 
 #make a full new migration
 export EFC_AppSettingsFolder="$AppSettingsFolder"
-dotnet ef migrations add miInitial -c $DBContext -p ../2b_DbContext -s ../2b_DbContext -o Migrations/$DBContext
+dotnet ef migrations add miInitial -c $DBContext -p ../DbContext -s ../DbContext -o ../DbContext/Migrations/$DBContext
 
 #update the database from the migration
 export EFC_AppSettingsFolder="$AppSettingsFolder"
-dotnet ef database update -c $DBContext -p ../2b_DbContext -s ../2b_DbContext
+dotnet ef database update -c $DBContext -p ../DbContext -s ../DbContext
 
 #to initialize the database you need to run the sql scripts
-#../2b_DbContext/SqlScripts/<db_type>/initDatabase.sql
+#../DbContext/SqlScripts/<db_type>/initDatabase.sql
 

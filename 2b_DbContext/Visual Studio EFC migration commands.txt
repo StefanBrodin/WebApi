@@ -1,0 +1,38 @@
+﻿In *Visual Studio*, open PMC (Package Manager Console) and ensure that the Class Library project, DbContext, is the default project.
+
+
+*Visual Studio* Database migrations.
+----------------------------------
+in the PMC terminal, type below commands. After each migration you will get a success confirmation from EFC.
+Use command depending on your database.
+
+sqlserver:
+add-migration initial_migration -context SqlServerDbContext -outputdir Migrations/SqlServerMigrations
+
+MariaDb:
+add-migration initial_migration --context mysqlDbContext --outputdir Migrations/mysqlMigrations
+
+Postgres:
+add-migration initial_migration --context PostgresDbContext --outputdir Migrations/PostgresMigrations
+
+SQLite:
+add-migration initial_migration --context SqliteDbContext --outputdir Migrations/SqliteMigrations
+
+
+
+*Visual Studio* Commit the migrations to the Database (create or update the databases).
+----------------------------------------------------------------------------
+
+in the PMC terminal, type below commands. After each migration you will get a success confirmation
+sqlserver:
+update-database -context SqlServerDbContext
+
+MariaDb:
+update-database -context mysqlDbContext
+
+Postgres:
+update-database -context PostgresDbContext
+
+SQLite:
+update-database -context SqliteDbContext
+

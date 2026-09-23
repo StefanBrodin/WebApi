@@ -1,7 +1,6 @@
-# Updated for this solution's project/folder naming ("2b_DbContext")
-
 # För att göra .ps1-filen körbar, kör följande kommando i PowerShell (Behöver bara köras första gången):
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
 
 #If EFC tools needs update use:
 #dotnet tool update --global dotnet-ef
@@ -10,7 +9,7 @@
 # .\database-rebuild-all.ps1 databasename [sqlserver|mysql|postgresql] [docker|azure] [root|dbo|supusr|usr|gstusr] appsettingsFolder
 
 # example:
-# .\database-rebuild-all.ps1 sql-friends sqlserver docker root ..\0_AppWebApi
+# .\database-rebuild-all.ps1 sql-friends sqlserver docker dbo ..\AppWebApi
 # .\database-rebuild-all.ps1 sql-friends sqlserver docker dbo ..\AppRazor
 # .\database-rebuild-all.ps1 sql-friends sqlserver docker dbo ..\AppMvc
 
@@ -36,8 +35,8 @@ param(
 
 #Set Database Context
 switch ($DatabaseType) {
-    "sqlserver"  { $DBContext = "SqlServerDbContext" }
-    "mysql"      { $DBContext = "MySqlDbContext" }
+    "sqlserver" { $DBContext = "SqlServerDbContext" }
+    "mysql" { $DBContext = "mysqlDbContext" }
     "postgresql" { $DBContext = "PostgresDbContext" }
 }
 
@@ -57,19 +56,20 @@ Set-Content $AppSettingsPath $UpdatedContent
 if ($DeploymentTarget -eq "docker") {
     #drop any database
     $env:EFC_AppSettingsFolder = $AppSettingsFolder
-    dotnet ef database drop -f -c $DBContext -p ../2b_DbContext -s ../2b_DbContext
+    dotnet ef database drop -f -c $DBContext -p ../DbContext -s ../DbContext
 }
 
 #remove any migration
-Remove-Item -Recurse -Force ../2b_DbContext/Migrations/$DBContext -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force ../DbContext/Migrations/$DBContext -ErrorAction SilentlyContinue
 
 #make a full new migration
 $env:EFC_AppSettingsFolder = $AppSettingsFolder
-dotnet ef migrations add miInitial -c $DBContext -p ../2b_DbContext -s ../2b_DbContext -o Migrations/$DBContext
+dotnet ef migrations add miInitial -c $DBContext -p ../DbContext -s ../DbContext -o ../DbContext/Migrations/$DBContext
 
 #update the database from the migration
 $env:EFC_AppSettingsFolder = $AppSettingsFolder
-dotnet ef database update -c $DBContext -p ../2b_DbContext -s ../2b_DbContext
+dotnet ef database update -c $DBContext -p ../DbContext -s ../DbContext
 
 #to initialize the database you need to run the sql scripts
-#../2b_DbContext/SqlScripts/<db_type>/initDatabase.sql
+#../DbContext/SqlScripts/<db_type>/initDatabase.sql
+
