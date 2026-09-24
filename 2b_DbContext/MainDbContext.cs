@@ -34,6 +34,8 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<AddressDbM> Addresses { get; set; }
     public DbSet<CategoryDbM> Categories { get; set; }
     public DbSet<CustomerDbM> Customers { get; set; }
+    public DbSet<AttractionDbM> Attractions { get; set; }
+
     #endregion
 
 

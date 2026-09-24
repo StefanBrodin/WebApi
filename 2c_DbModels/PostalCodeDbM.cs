@@ -14,7 +14,7 @@ public class PostalCodeDbM : PostalCode, ISeed<PostalCodeDbM>, IEquatable<Postal
     public override Guid PostalCodeId { get; set; }
 
     [Required]
-    [Column("PostalCode", TypeName = "nchar(10)")]
+    [Column("PostalCode")]
     [MaxLength(10)]
     public override string PostalCodeNumber { get; set; }
 
