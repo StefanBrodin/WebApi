@@ -3,14 +3,14 @@ To create the AppWebApi
 1. Create the database. With Terminal in folder _scripts 
    
    macOs
-   ./database-rebuild-all.sh sql-friends sqlserver docker root ../0_AppWebApi
-   ./database-rebuild-all.sh sql-friends mysql docker root ../0_AppWebApi
-   ./database-rebuild-all.sh sql-friends postgresql docker root ../0_AppWebApi
+   ./database-rebuild-all.sh sql-attraction-rating-app sqlserver docker root ../0_AppWebApi
+   ./database-rebuild-all.sh sql-attraction-rating-app mysql docker root ../0_AppWebApi
+   ./database-rebuild-all.sh sql-attraction-rating-app postgresql docker root ../0_AppWebApi
    
    Windows
-   ./database-rebuild-all.ps1 sql-friends sqlserver docker root ..\0_AppWebApi
-   ./database-rebuild-all.ps1 sql-friends mysql docker root ..\0_AppWebApi
-   ./database-rebuild-all.ps1 sql-friends postgresql docker root ..\0_AppWebApi
+   ./database-rebuild-all.ps1 sql-attraction-rating-app sqlserver docker root ..\0_AppWebApi
+   ./database-rebuild-all.ps1 sql-attraction-rating-app mysql docker root ..\0_AppWebApi
+   ./database-rebuild-all.ps1 sql-attraction-rating-app postgresql docker root ..\0_AppWebApi
 
    Ensure no errors from build, migration or database update
 
@@ -18,7 +18,7 @@ To create the AppWebApi
 2. From Azure Data Studio you can now connect to the database
    Use connection string from user secrets:
    connection string corresponding to Tag
-   "sql-friends.<db_type>.docker.root"
+   "sql-attraction-rating-app.<db_type>.docker.root"
 
 3. Run AppWebApi with or without debugger
 

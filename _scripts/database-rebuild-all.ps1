@@ -10,9 +10,9 @@
 # .\database-rebuild-all.ps1 databasename [sqlserver|mysql|postgresql] [docker|azure] [root|dbo|supusr|usr|gstusr] appsettingsFolder
 
 # example:
-# .\database-rebuild-all.ps1 sql-friends sqlserver docker root ..\0_AppWebApi
-# .\database-rebuild-all.ps1 sql-friends sqlserver docker dbo ..\AppRazor
-# .\database-rebuild-all.ps1 sql-friends sqlserver docker dbo ..\AppMvc
+# .\database-rebuild-all.ps1 sql-attraction-rating-app sqlserver docker root ..\0_AppWebApi
+# .\database-rebuild-all.ps1 sql-attraction-rating-app sqlserver docker dbo ..\AppRazor
+# .\database-rebuild-all.ps1 sql-attraction-rating-app sqlserver docker dbo ..\AppMvc
 
 param(
     [Parameter(Mandatory=$true)]

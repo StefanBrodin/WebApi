@@ -22,21 +22,33 @@ namespace DbContext.Migrations.PostgresDbContext
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DbModels.QuoteDbM", b =>
+            modelBuilder.Entity("DbModels.CreditCardDbM", b =>
                 {
-                    b.Property<Guid>("QuoteId")
+                    b.Property<Guid>("CreditCardId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Author")
+                    b.Property<string>("CardHolderName")
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("QuoteText")
+                    b.Property<string>("ExpirationMonth")
                         .HasColumnType("varchar(200)");
 
-                    b.HasKey("QuoteId");
+                    b.Property<string>("ExpirationYear")
+                        .HasColumnType("varchar(200)");
 
-                    b.ToTable("Quotes");
+                    b.Property<int>("Issuer")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("CreditCardId");
+
+                    b.ToTable("CreditCards");
                 });
 #pragma warning restore 612, 618
         }

@@ -55,21 +55,21 @@ All 3 steps above
 -----------------
 
 sqlserver:
-Remember to switch to "sql-friends.mysql.docker" in appsettings.json, then copy/paste: 
+Remember to switch to "sql-attraction-rating-app.mysql.docker" in appsettings.json, then copy/paste: 
 
 dotnet ef database drop -f --context SqlServerDbContext
 dotnet ef migrations add initial_migration --context SqlServerDbContext --output-dir Migrations/SqlServerDbContext
 dotnet ef database update --context SqlServerDbContext
 
 MariaDb:
-Remember to switch to "sql-friends.mysql.docker" in appsettings.json, then copy/paste: 
+Remember to switch to "sql-attraction-rating-app.mysql.docker" in appsettings.json, then copy/paste: 
 
 dotnet ef database drop -f --context MySqlDbContext
 dotnet ef migrations add initial_migration --context MySqlDbContext --output-dir Migrations/MySqlDbContext
 dotnet ef database update --context MySqlDbContext
 
 Postgres:
-Remember to switch to "sql-friends.postgresql.docker" in appsettings.json, then copy/paste: 
+Remember to switch to "sql-attraction-rating-app.postgresql.docker" in appsettings.json, then copy/paste: 
 
 dotnet ef database drop -f --context PostgresDbContext
 dotnet ef migrations add initial_migration --context PostgresDbContext --output-dir Migrations/PostgresDbContext

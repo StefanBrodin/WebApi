@@ -22,13 +22,12 @@ public class AdminDbRepos
         var fn = Path.GetFullPath(_seedSource);
         var seeder = new SeedGenerator(fn);
 
-        // Remove existing quotes in the database
-        _dbContext.Quotes.RemoveRange(_dbContext.Quotes);
+        // Remove existing credit cards in the database
+        _dbContext.CreditCards.RemoveRange(_dbContext.CreditCards);
 
-        // Seeding new quotes into the database
-        // var quotes = seeder.AllQuotes.Select(q => new QuoteDbM(q)).ToList();
-        var quotes = seeder.Quotes(nrItems).Select(q => new QuoteDbM(q)).ToList();
-        _dbContext.Quotes.AddRange(quotes);
+        // Seeding new credit cards into the database
+        var creditcards = seeder.ItemsToList<CreditCardDbM>(nrItems);
+        _dbContext.CreditCards.AddRange(creditcards);
 
         // Save changes to the database
         await _dbContext.SaveChangesAsync();
