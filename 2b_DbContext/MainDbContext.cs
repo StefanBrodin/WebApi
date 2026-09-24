@@ -28,6 +28,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     // Models of the database tables are defined here as DbSet<T> properties
     #region C# model of database tables
     public DbSet<CreditCardDbM> CreditCards { get; set; }
+    public DbSet<CountryDbM> Countries { get; set; }
     #endregion
 
 
