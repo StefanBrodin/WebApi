@@ -22,6 +22,142 @@ namespace DbContext.Migrations.MySqlDbContext
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("DbModels.AddressDbM", b =>
+                {
+                    b.Property<Guid>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PostalCodeId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("StreetNumber")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("PostalCodeId");
+
+                    b.ToTable("Address", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
+                {
+                    b.Property<Guid>("AttractionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("AttractionId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("AttractionCategory", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.AttractionDbM", b =>
+                {
+                    b.Property<Guid>("AttractionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("AttractionDescription")
+                        .HasMaxLength(4000)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("AttractionName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("AttractionId");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Attraction", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.CategoryDbM", b =>
+                {
+                    b.Property<Guid>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Category", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.CityDbM", b =>
+                {
+                    b.Property<Guid>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("City", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.CountryDbM", b =>
+                {
+                    b.Property<Guid>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CountryId");
+
+                    b.ToTable("Country", "dbo");
+                });
+
             modelBuilder.Entity("DbModels.CreditCardDbM", b =>
                 {
                     b.Property<Guid>("CreditCardId")
@@ -49,6 +185,220 @@ namespace DbContext.Migrations.MySqlDbContext
                     b.HasKey("CreditCardId");
 
                     b.ToTable("CreditCards");
+                });
+
+            modelBuilder.Entity("DbModels.CustomerAttractionRatingDbM", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AttractionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("RatingReview")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<byte?>("RatingScore")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<DateTime>("RatingTimestamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CustomerId", "AttractionId");
+
+                    b.HasIndex("AttractionId");
+
+                    b.ToTable("CustomerAttractionRating", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.CustomerDbM", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("AddressId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CustomerFirstName")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CustomerLastName")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CustomerUserName")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CustomerId");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Customer", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
+                {
+                    b.Property<Guid>("PostalCodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("PostalCodeNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("PostalCode");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("PostalCodeId");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("PostalCode", "dbo");
+                });
+
+            modelBuilder.Entity("DbModels.AddressDbM", b =>
+                {
+                    b.HasOne("DbModels.PostalCodeDbM", "PostalCodeDbM")
+                        .WithMany("AddressesDbM")
+                        .HasForeignKey("PostalCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostalCodeDbM");
+                });
+
+            modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
+                {
+                    b.HasOne("DbModels.AttractionDbM", "AttractionDbM")
+                        .WithMany("AttractionCategoriesDbM")
+                        .HasForeignKey("AttractionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbModels.CategoryDbM", "CategoryDbM")
+                        .WithMany("AttractionCategoriesDbM")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttractionDbM");
+
+                    b.Navigation("CategoryDbM");
+                });
+
+            modelBuilder.Entity("DbModels.AttractionDbM", b =>
+                {
+                    b.HasOne("DbModels.AddressDbM", "AddressDbM")
+                        .WithMany("AttractionsDbM")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CityDbM", b =>
+                {
+                    b.HasOne("DbModels.CountryDbM", "CountryDbM")
+                        .WithMany("CitiesDbM")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CountryDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CustomerAttractionRatingDbM", b =>
+                {
+                    b.HasOne("DbModels.AttractionDbM", "AttractionDbM")
+                        .WithMany("CustomerAttractionRatingsDbM")
+                        .HasForeignKey("AttractionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbModels.CustomerDbM", "CustomerDbM")
+                        .WithMany("CustomerAttractionRatingsDbM")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AttractionDbM");
+
+                    b.Navigation("CustomerDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CustomerDbM", b =>
+                {
+                    b.HasOne("DbModels.AddressDbM", "AddressDbM")
+                        .WithMany("CustomersDbM")
+                        .HasForeignKey("AddressId");
+
+                    b.Navigation("AddressDbM");
+                });
+
+            modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
+                {
+                    b.HasOne("DbModels.CityDbM", "CityDbM")
+                        .WithMany("PostalCodesDbM")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CityDbM");
+                });
+
+            modelBuilder.Entity("DbModels.AddressDbM", b =>
+                {
+                    b.Navigation("AttractionsDbM");
+
+                    b.Navigation("CustomersDbM");
+                });
+
+            modelBuilder.Entity("DbModels.AttractionDbM", b =>
+                {
+                    b.Navigation("AttractionCategoriesDbM");
+
+                    b.Navigation("CustomerAttractionRatingsDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CategoryDbM", b =>
+                {
+                    b.Navigation("AttractionCategoriesDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CityDbM", b =>
+                {
+                    b.Navigation("PostalCodesDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CountryDbM", b =>
+                {
+                    b.Navigation("CitiesDbM");
+                });
+
+            modelBuilder.Entity("DbModels.CustomerDbM", b =>
+                {
+                    b.Navigation("CustomerAttractionRatingsDbM");
+                });
+
+            modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
+                {
+                    b.Navigation("AddressesDbM");
                 });
 #pragma warning restore 612, 618
         }

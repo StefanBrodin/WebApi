@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
@@ -8,6 +9,7 @@ using Models;
 namespace DbModels;
 
 [Table("Attraction", Schema = "dbo")]
+[Index(nameof(AttractionName))]
 public class AttractionDbM : Attraction, ISeed<AttractionDbM>, IEquatable<AttractionDbM>
 {
     [Key]

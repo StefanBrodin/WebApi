@@ -1,20 +1,20 @@
 ﻿namespace Models;
 
-public interface ICustomer
+public interface ICustomerAttractionRating
 {
     public Guid CustomerId { get; set; }
-    public string CustomerFirstName { get; set; }
-    public string CustomerLastName { get; set; }
-    public string CustomerUserName { get; set; }
+    public Guid AttractionId { get; set; }
 
-    public Guid? AddressId { get; set; }
+    public byte? RatingScore { get; set; }
+    public string RatingReview { get; set; }
+    public DateTime RatingTimestamp { get; set; }
 
     // Model relationships
-    // One Customer may have one Address
-    public IAddress Address { get; set; }
+    // Belongs to one Customer
+    public ICustomer Customer { get; set; }
 
-    // One Customer may have many Ratings/Reviews
-    public List<ICustomerAttractionRating> CustomerAttractionRatings { get; set; }
+    // Belongs to one Attraction
+    public IAttraction Attraction { get; set; }
 
     public bool Seeded { get; set; }
 }

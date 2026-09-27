@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
@@ -8,6 +9,7 @@ using Models;
 namespace DbModels;
 
 [Table("City", Schema = "dbo")]
+[Index(nameof(CountryId), nameof(CityName), IsUnique = true)]
 public class CityDbM : City, ISeed<CityDbM>, IEquatable<CityDbM>
 {
     [Key]
