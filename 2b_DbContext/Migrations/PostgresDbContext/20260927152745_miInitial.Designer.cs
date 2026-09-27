@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DbContext.Migrations.PostgresDbContext
 {
     [DbContext(typeof(MainDbContext.PostgresDbContext))]
-    [Migration("20260924210442_miInitial")]
+    [Migration("20260927152745_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasIndex("PostalCodeId");
 
-                    b.ToTable("Address", "dbo");
+                    b.ToTable("Address", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
@@ -68,7 +68,7 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("AttractionCategory", "dbo");
+                    b.ToTable("AttractionCategory", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AttractionDbM", b =>
@@ -96,7 +96,9 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Attraction", "dbo");
+                    b.HasIndex("AttractionName");
+
+                    b.ToTable("Attraction", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CategoryDbM", b =>
@@ -115,7 +117,10 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category", "dbo");
+                    b.HasIndex("CategoryName")
+                        .IsUnique();
+
+                    b.ToTable("Category", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CityDbM", b =>
@@ -137,9 +142,10 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("CityId");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryId", "CityName")
+                        .IsUnique();
 
-                    b.ToTable("City", "dbo");
+                    b.ToTable("City", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CountryDbM", b =>
@@ -158,7 +164,10 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("CountryId");
 
-                    b.ToTable("Country", "dbo");
+                    b.HasIndex("CountryName")
+                        .IsUnique();
+
+                    b.ToTable("Country", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CreditCardDbM", b =>
@@ -215,7 +224,7 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasIndex("AttractionId");
 
-                    b.ToTable("CustomerAttractionRating", "dbo");
+                    b.ToTable("CustomerAttractionRating", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CustomerDbM", b =>
@@ -246,7 +255,10 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Customer", "dbo");
+                    b.HasIndex("CustomerUserName")
+                        .IsUnique();
+
+                    b.ToTable("Customer", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
@@ -269,9 +281,10 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("PostalCodeId");
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("CityId", "PostalCodeNumber")
+                        .IsUnique();
 
-                    b.ToTable("PostalCode", "dbo");
+                    b.ToTable("PostalCode", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>

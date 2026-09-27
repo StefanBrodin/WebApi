@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("Customer", Schema = "dbo")]
+[Table("Customer", Schema = "supusr")]
 [Index(nameof(CustomerUserName), IsUnique = true)]
 public class CustomerDbM : Customer, ISeed<CustomerDbM>, IEquatable<CustomerDbM>
 {

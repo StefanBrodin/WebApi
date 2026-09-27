@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("Attraction", Schema = "dbo")]
+[Table("Attraction", Schema = "supusr")]
 [Index(nameof(AttractionName))]
 public class AttractionDbM : Attraction, ISeed<AttractionDbM>, IEquatable<AttractionDbM>
 {

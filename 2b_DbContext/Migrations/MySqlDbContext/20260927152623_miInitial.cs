@@ -12,14 +12,14 @@ namespace DbContext.Migrations.MySqlDbContext
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "dbo");
+                name: "supusr");
 
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Category",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -35,7 +35,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "Country",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     CountryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -73,7 +73,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "City",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     CityId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -88,7 +88,7 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_City_Country_CountryId",
                         column: x => x.CountryId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Country",
                         principalColumn: "CountryId",
                         onDelete: ReferentialAction.Cascade);
@@ -97,7 +97,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "PostalCode",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     PostalCodeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -112,7 +112,7 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_PostalCode_City_CityId",
                         column: x => x.CityId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "City",
                         principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
@@ -121,7 +121,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "Address",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     AddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -138,7 +138,7 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_Address_PostalCode_PostalCodeId",
                         column: x => x.PostalCodeId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "PostalCode",
                         principalColumn: "PostalCodeId",
                         onDelete: ReferentialAction.Cascade);
@@ -147,7 +147,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "Attraction",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     AttractionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -164,7 +164,7 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_Attraction_Address_AddressId",
                         column: x => x.AddressId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Address",
                         principalColumn: "AddressId",
                         onDelete: ReferentialAction.Cascade);
@@ -173,7 +173,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "Customer",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -192,7 +192,7 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_Customer_Address_AddressId",
                         column: x => x.AddressId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Address",
                         principalColumn: "AddressId");
                 })
@@ -200,7 +200,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "AttractionCategory",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     AttractionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -213,14 +213,14 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_AttractionCategory_Attraction_AttractionId",
                         column: x => x.AttractionId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Attraction",
                         principalColumn: "AttractionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AttractionCategory_Category_CategoryId",
                         column: x => x.CategoryId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Category",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
@@ -229,7 +229,7 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateTable(
                 name: "CustomerAttractionRating",
-                schema: "dbo",
+                schema: "supusr",
                 columns: table => new
                 {
                     CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -246,14 +246,14 @@ namespace DbContext.Migrations.MySqlDbContext
                     table.ForeignKey(
                         name: "FK_CustomerAttractionRating_Attraction_AttractionId",
                         column: x => x.AttractionId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Attraction",
                         principalColumn: "AttractionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CustomerAttractionRating_Customer_CustomerId",
                         column: x => x.CustomerId,
-                        principalSchema: "dbo",
+                        principalSchema: "supusr",
                         principalTable: "Customer",
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Cascade);
@@ -262,45 +262,74 @@ namespace DbContext.Migrations.MySqlDbContext
 
             migrationBuilder.CreateIndex(
                 name: "IX_Address_PostalCodeId",
-                schema: "dbo",
+                schema: "supusr",
                 table: "Address",
                 column: "PostalCodeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attraction_AddressId",
-                schema: "dbo",
+                schema: "supusr",
                 table: "Attraction",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attraction_AttractionName",
+                schema: "supusr",
+                table: "Attraction",
+                column: "AttractionName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AttractionCategory_CategoryId",
-                schema: "dbo",
+                schema: "supusr",
                 table: "AttractionCategory",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_City_CountryId",
-                schema: "dbo",
+                name: "IX_Category_CategoryName",
+                schema: "supusr",
+                table: "Category",
+                column: "CategoryName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_City_CountryId_CityName",
+                schema: "supusr",
                 table: "City",
-                column: "CountryId");
+                columns: new[] { "CountryId", "CityName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_CountryName",
+                schema: "supusr",
+                table: "Country",
+                column: "CountryName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customer_AddressId",
-                schema: "dbo",
+                schema: "supusr",
                 table: "Customer",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customer_CustomerUserName",
+                schema: "supusr",
+                table: "Customer",
+                column: "CustomerUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CustomerAttractionRating_AttractionId",
-                schema: "dbo",
+                schema: "supusr",
                 table: "CustomerAttractionRating",
                 column: "AttractionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostalCode_CityId",
-                schema: "dbo",
+                name: "IX_PostalCode_CityId_PostalCode",
+                schema: "supusr",
                 table: "PostalCode",
-                column: "CityId");
+                columns: new[] { "CityId", "PostalCode" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -308,42 +337,42 @@ namespace DbContext.Migrations.MySqlDbContext
         {
             migrationBuilder.DropTable(
                 name: "AttractionCategory",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "CreditCards");
 
             migrationBuilder.DropTable(
                 name: "CustomerAttractionRating",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "Category",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "Attraction",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "Customer",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "Address",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "PostalCode",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "City",
-                schema: "dbo");
+                schema: "supusr");
 
             migrationBuilder.DropTable(
                 name: "Country",
-                schema: "dbo");
+                schema: "supusr");
         }
     }
 }

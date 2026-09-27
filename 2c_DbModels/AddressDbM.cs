@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("Address", Schema = "dbo")]
+[Table("Address", Schema = "supusr")]
 public class AddressDbM : Address, ISeed<AddressDbM>, IEquatable<AddressDbM>
 {
     [Key]

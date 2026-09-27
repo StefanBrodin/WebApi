@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("CustomerAttractionRating", Schema = "dbo")]
+[Table("CustomerAttractionRating", Schema = "supusr")]
 [PrimaryKey(nameof(CustomerId), nameof(AttractionId))]
 public class CustomerAttractionRatingDbM : CustomerAttractionRating, ISeed<CustomerAttractionRatingDbM>, IEquatable<CustomerAttractionRatingDbM>
 {

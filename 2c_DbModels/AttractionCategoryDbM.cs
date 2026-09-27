@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("AttractionCategory", Schema = "dbo")]
+[Table("AttractionCategory", Schema = "supusr")]
 [PrimaryKey(nameof(AttractionId), nameof(CategoryId))]
 public class AttractionCategoryDbM : AttractionCategory, ISeed<AttractionCategoryDbM>, IEquatable<AttractionCategoryDbM>
 {

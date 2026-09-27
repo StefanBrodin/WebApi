@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("PostalCode", Schema = "dbo")]
+[Table("PostalCode", Schema = "supusr")]
 [Index(nameof(CityId), nameof(PostalCodeNumber), IsUnique = true)]
 public class PostalCodeDbM : PostalCode, ISeed<PostalCodeDbM>, IEquatable<PostalCodeDbM>
 {

@@ -8,7 +8,7 @@ using Models;
 
 namespace DbModels;
 
-[Table("Country", Schema = "dbo")]
+[Table("Country", Schema = "supusr")]
 [Index(nameof(CountryName), IsUnique = true)]
 public class CountryDbM : Country, ISeed<CountryDbM>, IEquatable<CountryDbM>
 {
