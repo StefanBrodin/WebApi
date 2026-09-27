@@ -10,6 +10,9 @@ namespace DbModels;
 
 [Table("AttractionCategory", Schema = "supusr")]
 [PrimaryKey(nameof(AttractionId), nameof(CategoryId))]
+
+[Index(nameof(AttractionId), nameof(CategoryId))]
+[Index(nameof(CategoryId), nameof(AttractionId))]
 public class AttractionCategoryDbM : AttractionCategory, ISeed<AttractionCategoryDbM>, IEquatable<AttractionCategoryDbM>
 {
     [Required]
