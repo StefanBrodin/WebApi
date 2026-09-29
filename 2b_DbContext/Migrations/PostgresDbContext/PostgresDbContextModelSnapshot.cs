@@ -63,7 +63,9 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("AttractionId", "CategoryId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AttractionId", "CategoryId");
+
+                    b.HasIndex("CategoryId", "AttractionId");
 
                     b.ToTable("AttractionCategory", "supusr");
                 });
@@ -359,7 +361,8 @@ namespace DbContext.Migrations.PostgresDbContext
                 {
                     b.HasOne("DbModels.AddressDbM", "AddressDbM")
                         .WithMany("CustomersDbM")
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AddressDbM");
                 });

@@ -36,7 +36,7 @@ public class CategoryDbM : Category, ISeed<CategoryDbM>, IEquatable<CategoryDbM>
     }
 
     [JsonIgnore]
-    public virtual List<AttractionCategoryDbM> AttractionCategoriesDbM { get; set; } = new();
+    public List<AttractionCategoryDbM> AttractionCategoriesDbM { get; set; } = new();
     #endregion
 
     #region constructors

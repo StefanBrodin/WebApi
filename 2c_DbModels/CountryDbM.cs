@@ -36,7 +36,7 @@ public class CountryDbM : Country, ISeed<CountryDbM>, IEquatable<CountryDbM>
     }
 
     [JsonIgnore]
-    public virtual List<CityDbM> CitiesDbM { get; set; } = new();
+    public List<CityDbM> CitiesDbM { get; set; } = new();
     #endregion
 
     #region constructors

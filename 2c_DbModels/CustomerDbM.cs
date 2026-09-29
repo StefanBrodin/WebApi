@@ -44,7 +44,8 @@ public class CustomerDbM : Customer, ISeed<CustomerDbM>, IEquatable<CustomerDbM>
 
     [JsonIgnore]
     [ForeignKey(nameof(AddressId))]
-    public virtual AddressDbM AddressDbM { get; set; }
+    [DeleteBehavior(DeleteBehavior.SetNull)]
+    public AddressDbM AddressDbM { get; set; }
 
     [NotMapped]
     public override List<ICustomerAttractionRating> CustomerAttractionRatings 
@@ -54,7 +55,7 @@ public class CustomerDbM : Customer, ISeed<CustomerDbM>, IEquatable<CustomerDbM>
     }
 
     [JsonIgnore]
-    public virtual List<CustomerAttractionRatingDbM> CustomerAttractionRatingsDbM { get; set; } = new();
+    public List<CustomerAttractionRatingDbM> CustomerAttractionRatingsDbM { get; set; } = new();
     #endregion
 
     #region constructors

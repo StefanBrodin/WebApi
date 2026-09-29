@@ -47,7 +47,10 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasIndex("PostalCodeId");
 
-                    b.ToTable("Address", "supusr");
+                    b.ToTable("Address", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_StreetNameNotEmpty", "LEN(TRIM(StreetName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
@@ -63,7 +66,9 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("AttractionId", "CategoryId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AttractionId", "CategoryId");
+
+                    b.HasIndex("CategoryId", "AttractionId");
 
                     b.ToTable("AttractionCategory", "supusr");
                 });
@@ -95,7 +100,10 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasIndex("AttractionName");
 
-                    b.ToTable("Attraction", "supusr");
+                    b.ToTable("Attraction", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_AttractionNameNotEmpty", "LEN(TRIM(AttractionName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CategoryDbM", b =>
@@ -117,7 +125,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.HasIndex("CategoryName")
                         .IsUnique();
 
-                    b.ToTable("Category", "supusr");
+                    b.ToTable("Category", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CategoryNameNotEmpty", "LEN(TRIM(CategoryName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CityDbM", b =>
@@ -142,7 +153,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.HasIndex("CountryId", "CityName")
                         .IsUnique();
 
-                    b.ToTable("City", "supusr");
+                    b.ToTable("City", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CityNameNotEmpty", "LEN(TRIM(CityName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CountryDbM", b =>
@@ -164,7 +178,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.HasIndex("CountryName")
                         .IsUnique();
 
-                    b.ToTable("Country", "supusr");
+                    b.ToTable("Country", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CreditCardDbM", b =>
@@ -221,7 +238,12 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasIndex("AttractionId");
 
-                    b.ToTable("CustomerAttractionRating", "supusr");
+                    b.ToTable("CustomerAttractionRating", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_RatingHasContent", "(RatingScore IS NOT NULL) OR (RatingReview IS NOT NULL AND LEN(TRIM(RatingReview)) > 0)");
+
+                            t.HasCheckConstraint("CK_RatingScoreRange", "RatingScore BETWEEN 1 AND 5 OR RatingScore IS NULL");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CustomerDbM", b =>
@@ -256,7 +278,12 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .IsUnique()
                         .HasFilter("[CustomerUserName] IS NOT NULL");
 
-                    b.ToTable("Customer", "supusr");
+                    b.ToTable("Customer", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CustomerUserNameEmailFormat", "CustomerUserName LIKE '%@%.%'");
+
+                            t.HasCheckConstraint("CK_CustomerUserNameNotEmpty", "LEN(TRIM(CustomerUserName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
@@ -282,7 +309,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.HasIndex("CityId", "PostalCodeNumber")
                         .IsUnique();
 
-                    b.ToTable("PostalCode", "supusr");
+                    b.ToTable("PostalCode", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>
@@ -360,7 +390,8 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     b.HasOne("DbModels.AddressDbM", "AddressDbM")
                         .WithMany("CustomersDbM")
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AddressDbM");
                 });

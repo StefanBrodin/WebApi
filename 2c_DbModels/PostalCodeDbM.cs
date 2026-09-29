@@ -42,7 +42,7 @@ public class PostalCodeDbM : PostalCode, ISeed<PostalCodeDbM>, IEquatable<Postal
 
     [JsonIgnore]
     [ForeignKey(nameof(CityId))]
-    public virtual CityDbM CityDbM { get; set; }
+    public CityDbM CityDbM { get; set; }
 
     [NotMapped]
     public override List<IAddress> Addresses 
@@ -52,7 +52,7 @@ public class PostalCodeDbM : PostalCode, ISeed<PostalCodeDbM>, IEquatable<Postal
     }
 
     [JsonIgnore]
-    public virtual List<AddressDbM> AddressesDbM { get; set; } = new();
+    public List<AddressDbM> AddressesDbM { get; set; } = new();
     #endregion
 
     #region constructors

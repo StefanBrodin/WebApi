@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DbContext.Migrations.PostgresDbContext
 {
     [DbContext(typeof(MainDbContext.PostgresDbContext))]
-    [Migration("20260927152745_miInitial")]
+    [Migration("20260929195834_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -66,7 +66,9 @@ namespace DbContext.Migrations.PostgresDbContext
 
                     b.HasKey("AttractionId", "CategoryId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AttractionId", "CategoryId");
+
+                    b.HasIndex("CategoryId", "AttractionId");
 
                     b.ToTable("AttractionCategory", "supusr");
                 });
@@ -362,7 +364,8 @@ namespace DbContext.Migrations.PostgresDbContext
                 {
                     b.HasOne("DbModels.AddressDbM", "AddressDbM")
                         .WithMany("CustomersDbM")
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AddressDbM");
                 });

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DbContext.Migrations.SqlServerDbContext
+namespace DbContext.Migrations.MySqlDbContext
 {
     /// <inheritdoc />
     public partial class miInitial : Migration
@@ -14,60 +14,73 @@ namespace DbContext.Migrations.SqlServerDbContext
             migrationBuilder.EnsureSchema(
                 name: "supusr");
 
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Category",
                 schema: "supusr",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CategoryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.CategoryId);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Country",
                 schema: "supusr",
                 columns: table => new
                 {
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    CountryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CountryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Country", x => x.CountryId);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "CreditCards",
                 columns: table => new
                 {
-                    CreditCardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreditCardId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Issuer = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ExpirationYear = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ExpirationMonth = table.Column<string>(type: "varchar(200)", nullable: true),
-                    CardHolderName = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    Number = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExpirationYear = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExpirationMonth = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CardHolderName = table.Column<string>(type: "varchar(200)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CreditCards", x => x.CreditCardId);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "City",
                 schema: "supusr",
                 columns: table => new
                 {
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CityName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    CityId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CityName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CountryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,17 +92,19 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "Country",
                         principalColumn: "CountryId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "PostalCode",
                 schema: "supusr",
                 columns: table => new
                 {
-                    PostalCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostalCode = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    PostalCodeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PostalCode = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CityId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,18 +116,21 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "City",
                         principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Address",
                 schema: "supusr",
                 columns: table => new
                 {
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StreetName = table.Column<string>(type: "varchar(200)", maxLength: 50, nullable: false),
-                    StreetNumber = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: true),
-                    PostalCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    AddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    StreetName = table.Column<string>(type: "varchar(200)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetNumber = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PostalCodeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,18 +142,21 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "PostalCode",
                         principalColumn: "PostalCodeId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Attraction",
                 schema: "supusr",
                 columns: table => new
                 {
-                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AttractionName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    AttractionDescription = table.Column<string>(type: "varchar(200)", maxLength: 4000, nullable: true),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    AttractionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AttractionName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AttractionDescription = table.Column<string>(type: "varchar(200)", maxLength: 4000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,19 +168,23 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "Address",
                         principalColumn: "AddressId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Customer",
                 schema: "supusr",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerFirstName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
-                    CustomerLastName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
-                    CustomerUserName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
-                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CustomerFirstName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CustomerLastName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CustomerUserName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AddressId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,17 +194,19 @@ namespace DbContext.Migrations.SqlServerDbContext
                         column: x => x.AddressId,
                         principalSchema: "supusr",
                         principalTable: "Address",
-                        principalColumn: "AddressId");
-                });
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AttractionCategory",
                 schema: "supusr",
                 columns: table => new
                 {
-                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    AttractionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -198,19 +225,21 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "Category",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "CustomerAttractionRating",
                 schema: "supusr",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RatingScore = table.Column<byte>(type: "tinyint", nullable: true),
-                    RatingReview = table.Column<string>(type: "varchar(200)", maxLength: 500, nullable: true),
-                    RatingTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AttractionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    RatingScore = table.Column<byte>(type: "tinyint unsigned", nullable: true),
+                    RatingReview = table.Column<string>(type: "varchar(200)", maxLength: 500, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RatingTimestamp = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Seeded = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -229,7 +258,8 @@ namespace DbContext.Migrations.SqlServerDbContext
                         principalTable: "Customer",
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Address_PostalCodeId",
@@ -250,10 +280,16 @@ namespace DbContext.Migrations.SqlServerDbContext
                 column: "AttractionName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AttractionCategory_CategoryId",
+                name: "IX_AttractionCategory_AttractionId_CategoryId",
                 schema: "supusr",
                 table: "AttractionCategory",
-                column: "CategoryId");
+                columns: new[] { "AttractionId", "CategoryId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttractionCategory_CategoryId_AttractionId",
+                schema: "supusr",
+                table: "AttractionCategory",
+                columns: new[] { "CategoryId", "AttractionId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Category_CategoryName",
@@ -287,8 +323,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 schema: "supusr",
                 table: "Customer",
                 column: "CustomerUserName",
-                unique: true,
-                filter: "[CustomerUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerAttractionRating_AttractionId",

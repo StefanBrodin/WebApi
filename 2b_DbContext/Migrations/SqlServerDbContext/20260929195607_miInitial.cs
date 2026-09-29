@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DbContext.Migrations.PostgresDbContext
+namespace DbContext.Migrations.SqlServerDbContext
 {
     /// <inheritdoc />
     public partial class miInitial : Migration
@@ -19,13 +19,14 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.CategoryId);
+                    table.CheckConstraint("CK_CategoryNameNotEmpty", "LEN(TRIM(CategoryName)) > 0");
                 });
 
             migrationBuilder.CreateTable(
@@ -33,26 +34,27 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CountryName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Country", x => x.CountryId);
+                    table.CheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0");
                 });
 
             migrationBuilder.CreateTable(
                 name: "CreditCards",
                 columns: table => new
                 {
-                    CreditCardId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Issuer = table.Column<int>(type: "integer", nullable: false),
+                    CreditCardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Issuer = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<string>(type: "varchar(200)", nullable: true),
                     ExpirationYear = table.Column<string>(type: "varchar(200)", nullable: true),
                     ExpirationMonth = table.Column<string>(type: "varchar(200)", nullable: true),
                     CardHolderName = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,14 +66,15 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CityName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_City", x => x.CityId);
+                    table.CheckConstraint("CK_CityNameNotEmpty", "LEN(TRIM(CityName)) > 0");
                     table.ForeignKey(
                         name: "FK_City_Country_CountryId",
                         column: x => x.CountryId,
@@ -86,14 +89,15 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    PostalCodeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PostalCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostalCode = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: false),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PostalCode", x => x.PostalCodeId);
+                    table.CheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0");
                     table.ForeignKey(
                         name: "FK_PostalCode_City_CityId",
                         column: x => x.CityId,
@@ -108,15 +112,16 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StreetName = table.Column<string>(type: "varchar(200)", maxLength: 50, nullable: false),
                     StreetNumber = table.Column<string>(type: "varchar(200)", maxLength: 10, nullable: true),
-                    PostalCodeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    PostalCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Address", x => x.AddressId);
+                    table.CheckConstraint("CK_StreetNameNotEmpty", "LEN(TRIM(StreetName)) > 0");
                     table.ForeignKey(
                         name: "FK_Address_PostalCode_PostalCodeId",
                         column: x => x.PostalCodeId,
@@ -131,15 +136,16 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    AttractionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AttractionName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: false),
                     AttractionDescription = table.Column<string>(type: "varchar(200)", maxLength: 4000, nullable: true),
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Attraction", x => x.AttractionId);
+                    table.CheckConstraint("CK_AttractionNameNotEmpty", "LEN(TRIM(AttractionName)) > 0");
                     table.ForeignKey(
                         name: "FK_Attraction_Address_AddressId",
                         column: x => x.AddressId,
@@ -154,22 +160,25 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CustomerFirstName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
                     CustomerLastName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
                     CustomerUserName = table.Column<string>(type: "varchar(200)", maxLength: 30, nullable: true),
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.CustomerId);
+                    table.CheckConstraint("CK_CustomerUserNameEmailFormat", "CustomerUserName LIKE '%@%.%'");
+                    table.CheckConstraint("CK_CustomerUserNameNotEmpty", "LEN(TRIM(CustomerUserName)) > 0");
                     table.ForeignKey(
                         name: "FK_Customer_Address_AddressId",
                         column: x => x.AddressId,
                         principalSchema: "supusr",
                         principalTable: "Address",
-                        principalColumn: "AddressId");
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,9 +186,9 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    AttractionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,16 +214,18 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AttractionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RatingScore = table.Column<byte>(type: "smallint", nullable: true),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RatingScore = table.Column<byte>(type: "tinyint", nullable: true),
                     RatingReview = table.Column<string>(type: "varchar(200)", maxLength: 500, nullable: true),
-                    RatingTimestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Seeded = table.Column<bool>(type: "boolean", nullable: false)
+                    RatingTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CustomerAttractionRating", x => new { x.CustomerId, x.AttractionId });
+                    table.CheckConstraint("CK_RatingHasContent", "(RatingScore IS NOT NULL) OR (RatingReview IS NOT NULL AND LEN(TRIM(RatingReview)) > 0)");
+                    table.CheckConstraint("CK_RatingScoreRange", "RatingScore BETWEEN 1 AND 5 OR RatingScore IS NULL");
                     table.ForeignKey(
                         name: "FK_CustomerAttractionRating_Attraction_AttractionId",
                         column: x => x.AttractionId,
@@ -250,10 +261,16 @@ namespace DbContext.Migrations.PostgresDbContext
                 column: "AttractionName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AttractionCategory_CategoryId",
+                name: "IX_AttractionCategory_AttractionId_CategoryId",
                 schema: "supusr",
                 table: "AttractionCategory",
-                column: "CategoryId");
+                columns: new[] { "AttractionId", "CategoryId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AttractionCategory_CategoryId_AttractionId",
+                schema: "supusr",
+                table: "AttractionCategory",
+                columns: new[] { "CategoryId", "AttractionId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Category_CategoryName",
@@ -287,7 +304,8 @@ namespace DbContext.Migrations.PostgresDbContext
                 schema: "supusr",
                 table: "Customer",
                 column: "CustomerUserName",
-                unique: true);
+                unique: true,
+                filter: "[CustomerUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerAttractionRating_AttractionId",

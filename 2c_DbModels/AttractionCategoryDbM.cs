@@ -55,7 +55,7 @@ public class AttractionCategoryDbM : AttractionCategory, ISeed<AttractionCategor
     public CategoryDbM CategoryDbM { get; set; }
     #endregion
 
-    #region constructors
+    #region constructors 
     public AttractionCategoryDbM() : base() { }
     public AttractionCategoryDbM(AttractionCategory org) : base(org) { }
     #endregion

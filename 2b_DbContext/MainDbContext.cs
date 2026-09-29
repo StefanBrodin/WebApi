@@ -57,12 +57,14 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     // Here we can affect the model building for all DbContexts, for example, we can define a default schema for all tables in the database
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region override modelbuilder
-        #endregion
-        
         base.OnModelCreating(modelBuilder);
-    }
 
+        #region override modelbuilder
+        // Common configurations across all providers are handled by Data Annotations on the DbM classes
+        // SQL Server specific check constraints are handled in the SqlServerDbContext class below
+
+        #endregion
+    }
 
     // The various DbContext classes for different databases are defined here, for example, SqlServerDbContext, MySqlDbContext, PostgresDbContext. 
     // Each of these classes inherits from MainDbContext and can have their own specific configurations and conventions.
@@ -96,8 +98,48 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Add your own modelling based on done migrations
             base.OnModelCreating(modelBuilder);
+
+            // SQL Server CHECK Constraints 
+
+            // CustomerAttractionRating: Valid score (1-5 or null) and at least score or review
+            modelBuilder.Entity<CustomerAttractionRatingDbM>(b =>
+            {
+                b.ToTable(t =>
+                {
+                    t.HasCheckConstraint("CK_RatingScoreRange", "RatingScore BETWEEN 1 AND 5 OR RatingScore IS NULL");
+                    t.HasCheckConstraint("CK_RatingHasContent", "(RatingScore IS NOT NULL) OR (RatingReview IS NOT NULL AND LEN(TRIM(RatingReview)) > 0)");
+                });
+            });
+
+            // Customer: Non-empty username and basic email format
+            modelBuilder.Entity<CustomerDbM>(b =>
+            {
+                b.ToTable(t =>
+                {
+                    t.HasCheckConstraint("CK_CustomerUserNameNotEmpty", "LEN(TRIM(CustomerUserName)) > 0");
+                    t.HasCheckConstraint("CK_CustomerUserNameEmailFormat", "CustomerUserName LIKE '%@%.%'");
+                });
+            });
+
+            // Non-empty string constraints for geographic and attraction tables
+            modelBuilder.Entity<CountryDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0")));
+
+            modelBuilder.Entity<CityDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_CityNameNotEmpty", "LEN(TRIM(CityName)) > 0")));
+
+            modelBuilder.Entity<PostalCodeDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0")));
+
+            modelBuilder.Entity<AddressDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_StreetNameNotEmpty", "LEN(TRIM(StreetName)) > 0")));
+
+            modelBuilder.Entity<AttractionDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_AttractionNameNotEmpty", "LEN(TRIM(AttractionName)) > 0")));
+
+            modelBuilder.Entity<CategoryDbM>(b =>
+                b.ToTable(t => t.HasCheckConstraint("CK_CategoryNameNotEmpty", "LEN(TRIM(CategoryName)) > 0")));
         }
     }
 
@@ -105,7 +147,6 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public MySqlDbContext() { }
         public MySqlDbContext(DbContextOptions options) : base(options, null) { }        
-        // public MySqlDbContext(DbContextOptions options, DatabaseConnections databaseConnections) : base(options, databaseConnections) { }
 
 
         // Used only for CodeFirst Database Migration
