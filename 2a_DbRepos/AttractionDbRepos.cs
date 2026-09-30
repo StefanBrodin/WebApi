@@ -75,7 +75,13 @@ public class AttractionDbRepos
         IQueryable<AttractionDbM> query;
         if (flat)
         {
-            query = _dbContext.Attractions.AsNoTracking();
+            query = _dbContext.Attractions.AsNoTracking()
+                .Include(i => i.AddressDbM)
+                    .ThenInclude(a => a.PostalCodeDbM)
+                    .ThenInclude(p => p.CityDbM)
+                    .ThenInclude(c => c.CountryDbM)
+                .Include(i => i.AttractionCategoriesDbM)
+                    .ThenInclude(ac => ac.CategoryDbM);
         }
         else
         {
@@ -100,7 +106,10 @@ public class AttractionDbRepos
             .Where(i => (i.Seeded == seeded) &&
                         (string.IsNullOrEmpty(filter) ||
                          i.AttractionName.ToLower().Contains(filter) ||
-                         i.AttractionDescription.ToLower().Contains(filter))).CountAsync(),
+                         i.AttractionDescription.ToLower().Contains(filter) ||
+                         i.AddressDbM.PostalCodeDbM.CityDbM.CityName.ToLower().Contains(filter) ||
+                         i.AddressDbM.PostalCodeDbM.CityDbM.CountryDbM.CountryName.ToLower().Contains(filter) ||
+                         i.AttractionCategoriesDbM.Any(ac => ac.CategoryDbM.CategoryName.ToLower().Contains(filter)))).CountAsync(),
 
             PageItems = await query
 
@@ -108,7 +117,10 @@ public class AttractionDbRepos
             .Where(i => (i.Seeded == seeded) &&
                         (string.IsNullOrEmpty(filter) ||
                          i.AttractionName.ToLower().Contains(filter) ||
-                         i.AttractionDescription.ToLower().Contains(filter)))
+                         i.AttractionDescription.ToLower().Contains(filter) ||
+                         i.AddressDbM.PostalCodeDbM.CityDbM.CityName.ToLower().Contains(filter) ||
+                         i.AddressDbM.PostalCodeDbM.CityDbM.CountryDbM.CountryName.ToLower().Contains(filter) ||
+                         i.AttractionCategoriesDbM.Any(ac => ac.CategoryDbM.CategoryName.ToLower().Contains(filter))))
 
             // Adding paging
             .Skip(pageNumber * pageSize)
@@ -122,8 +134,50 @@ public class AttractionDbRepos
 
         return ret;
     }
+
+
+    // Read from SQL-view supusr.vw_Attractions_Without_Reviews
+    public async Task<ResponsePageDto<AttractionWithoutReviewsDto>> ReadAttractionsWithoutReviewsAsync(
+        bool seeded, 
+        string filter, 
+        int pageNumber, 
+        int pageSize)
+    {
+        filter ??= "";
+        filter = filter.ToLower().Trim();
+
+        var query = _dbContext.AttractionsWithoutReviewsView.AsNoTracking();
+
+        var ret = new ResponsePageDto<AttractionWithoutReviewsDto>()
+        {
+#if DEBUG
+            ConnectionString = _dbContext.Database.GetConnectionString(),
+#endif
+            DbItemsCount = await query
+                .Where(i => (i.Seeded == seeded) &&
+                            (string.IsNullOrEmpty(filter) ||
+                             i.AttractionName.ToLower().Contains(filter) ||
+                             i.AttractionDescription.ToLower().Contains(filter) ||
+                             i.CityName.ToLower().Contains(filter) ||
+                             i.CountryName.ToLower().Contains(filter))).CountAsync(),
+
+            PageItems = await query
+                .Where(i => (i.Seeded == seeded) &&
+                            (string.IsNullOrEmpty(filter) ||
+                             i.AttractionName.ToLower().Contains(filter) ||
+                             i.AttractionDescription.ToLower().Contains(filter) ||
+                             i.CityName.ToLower().Contains(filter) ||
+                             i.CountryName.ToLower().Contains(filter)))
+                .OrderBy(i => i.AttractionName)
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync(),
+
+            PageNr = pageNumber,
+            PageSize = pageSize
+        };
+
+        return ret;
+    }
+
 }
-
-
-
-

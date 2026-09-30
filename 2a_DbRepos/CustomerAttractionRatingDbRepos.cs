@@ -22,6 +22,8 @@ public class CustomerAttractionRatingDbRepos
             .AsNoTracking()
             .ToListAsync();
     }
+
+    
 }
 
 

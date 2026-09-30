@@ -315,6 +315,34 @@ namespace DbContext.Migrations.SqlServerDbContext
                         });
                 });
 
+            modelBuilder.Entity("Models.DTO.AttractionWithoutReviewsDto", b =>
+                {
+                    b.Property<string>("AttractionDescription")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("AttractionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AttractionName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CountryName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("FullStreetAddress")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("bit");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_Attractions_Without_Reviews", "supusr");
+                });
+
             modelBuilder.Entity("DbModels.AddressDbM", b =>
                 {
                     b.HasOne("DbModels.PostalCodeDbM", "PostalCodeDbM")

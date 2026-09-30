@@ -28,8 +28,12 @@ public class AttractionServiceDb : IAttractionService
     {
         return await _repo.ReadAttractionsAsync(seeded, flat, filter, pageNumber, pageSize);
     }
+
+    // The view showing attractions without reviews
+    public async Task<ResponsePageDto<AttractionWithoutReviewsDto>> ReadAttractionsWithoutReviewsAsync(bool seeded, string filter, int pageNumber, int pageSize)
+    {
+        return await _repo.ReadAttractionsWithoutReviewsAsync(seeded, filter, pageNumber, pageSize);
+    }
+
+
 }
-
-
-
-

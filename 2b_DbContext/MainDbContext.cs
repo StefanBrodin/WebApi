@@ -7,6 +7,8 @@ using DbModels;
 using Microsoft.Extensions.Hosting.Internal;
 using DbContext.Extensions;
 
+using Models.DTO;
+
 namespace DbContext;
 
 // DbContext namespace is a fundamental EFC layer of the database context and is
@@ -41,6 +43,11 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     #endregion
 
 
+    #region model the Views
+    public DbSet<AttractionWithoutReviewsDto> AttractionsWithoutReviewsView { get; set; }
+
+    #endregion
+
     // *Two* constructors are needed for the DbContext to work with EFC CodeFirst migration and database update commands
     #region constructors
     public MainDbContext() { }
@@ -63,6 +70,13 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
         // Common configurations across all providers are handled by Data Annotations on the DbM classes
         // SQL Server specific check constraints are handled in the SqlServerDbContext class below
 
+        #endregion
+
+
+        #region model the Views
+        modelBuilder.Entity<AttractionWithoutReviewsDto>()
+            .ToView("vw_Attractions_Without_Reviews", "supusr")
+            .HasNoKey();
         #endregion
     }
 

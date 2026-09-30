@@ -68,5 +68,27 @@ public class AttractionController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    // GET: /api/Attraction/ReadWithoutReviews?seeded=true&filter=&pageNumber=0&pageSize=10
+    [HttpGet("ReadWithoutReviews")]
+    public async Task<ActionResult<ResponsePageDto<AttractionWithoutReviewsDto>>> ReadWithoutReviews(
+        [FromQuery] bool seeded = true,
+        [FromQuery] string filter = null,
+        [FromQuery] int pageNumber = 0,
+        [FromQuery] int pageSize = 10)
+    {
+        try
+        {
+            var result = await _service.ReadAttractionsWithoutReviewsAsync(seeded, filter, pageNumber, pageSize);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error reading attractions without reviews from SQL view");
+            return BadRequest(ex.Message);
+        }
+    }
 }
+
+
 

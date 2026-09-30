@@ -179,6 +179,30 @@ public class AdminDbRepos
         }
         _dbContext.CustomerAttractionRatings.AddRange(ratings);
         await _dbContext.SaveChangesAsync();
+
+        await ExecuteInitScriptAsync();
+
+    }
+
+    // Execute the SQL script to create the view in the database
+    private async Task ExecuteInitScriptAsync()
+    {
+        // Path to the SQL script file, relative to the output directory of the application
+        var scriptPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SqlScripts", "sqlserver", "initDatabase.sql");
+        if (File.Exists(scriptPath))
+        {
+            var sql = await File.ReadAllTextAsync(scriptPath);
+            
+            // SQL Server uses "GO" as a batch separator, so we need to split the script into individual commands
+            var statements = sql.Split(new[] { "GO\r\n", "GO\n", "GO" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var statement in statements)
+            {
+                if (!string.IsNullOrWhiteSpace(statement))
+                {
+                    await _dbContext.Database.ExecuteSqlRawAsync(statement);
+                }
+            }
+        }
     }
 
 }

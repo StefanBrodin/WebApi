@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260930200654_miInitial")]
+    [Migration("20260930230606_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -316,6 +316,34 @@ namespace DbContext.Migrations.SqlServerDbContext
                         {
                             t.HasCheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0");
                         });
+                });
+
+            modelBuilder.Entity("Models.DTO.AttractionWithoutReviewsDto", b =>
+                {
+                    b.Property<string>("AttractionDescription")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("AttractionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AttractionName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("CountryName")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("FullStreetAddress")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Seeded")
+                        .HasColumnType("bit");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_Attractions_Without_Reviews", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>

@@ -26,11 +26,11 @@ public class CustomerController : ControllerBase
         return Ok(result);
     }
 
-    // GET: /api/Customer/Read?seeded=true&flat=true&filter=&pageNumber=0&pageSize=10
+    // GET: /api/Customer/Read?seeded=true&flat=false&filter=&pageNumber=0&pageSize=10
     [HttpGet("Read")]
     public async Task<ActionResult<ResponsePageDto<ICustomer>>> Read(
         [FromQuery] bool seeded = true,
-        [FromQuery] bool flat = true,
+        [FromQuery] bool flat = false,
         [FromQuery] string filter = null,
         [FromQuery] int pageNumber = 0,
         [FromQuery] int pageSize = 10)
@@ -43,6 +43,27 @@ public class CustomerController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error reading customers page");
+            return BadRequest(ex.Message);
+        }
+    }
+
+    // GET: /api/Customer/ReadWithReviews?seeded=true&filter=&pageNumber=0&pageSize=10
+    // Explicitly fulfils the requirement to read customers with reviews, by setting flat=false
+    [HttpGet("ReadWithReviews")]
+    public async Task<ActionResult<ResponsePageDto<ICustomer>>> ReadWithReviews(
+        [FromQuery] bool seeded = true,
+        [FromQuery] string filter = null,
+        [FromQuery] int pageNumber = 0,
+        [FromQuery] int pageSize = 10)
+    {
+        try
+        {
+            var result = await _service.ReadCustomersAsync(seeded, false, filter, pageNumber, pageSize);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error reading customers with reviews");
             return BadRequest(ex.Message);
         }
     }
@@ -69,5 +90,3 @@ public class CustomerController : ControllerBase
         }
     }
 }
-
-
