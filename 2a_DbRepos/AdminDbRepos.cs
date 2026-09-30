@@ -30,6 +30,7 @@ public class AdminDbRepos
         var seeder = new SeedGenerator(fn);
 
         // Remove existing countries in the database in the right order to avoid foreign key constraint violations
+        _dbContext.Addresses.RemoveRange(_dbContext.Addresses);
         _dbContext.PostalCodes.RemoveRange(_dbContext.PostalCodes);
         _dbContext.Cities.RemoveRange(_dbContext.Cities);
         _dbContext.Countries.RemoveRange(_dbContext.Countries);
@@ -69,7 +70,7 @@ public class AdminDbRepos
         _dbContext.Cities.AddRange(cities);
         await _dbContext.SaveChangesAsync();
 
-        // 4. Seed 200 unique postal codes into the database, ensuring that each postal code is unique within its city
+        // Seed 200 unique postal codes into the database, ensuring that each postal code is unique within its city
         var postalCodes = seeder.ItemsToList<PostalCodeDbM>(200);
         var postalCodeCountInCity = new Dictionary<(Guid, string), int>();
 
@@ -82,7 +83,7 @@ public class AdminDbRepos
             if (postalCodeCountInCity.ContainsKey(key))
             {
                 postalCodeCountInCity[key]++;
-                
+
                 // If there's a conflict in the same city, generate a unique 5-digit number
                 pc.PostalCodeNumber = $"{seeder.Next(10000, 99999)}";
             }
@@ -93,7 +94,18 @@ public class AdminDbRepos
         }
         _dbContext.PostalCodes.AddRange(postalCodes);
         await _dbContext.SaveChangesAsync();
+
+        // Seed 1100 addresses and link them to postal codes (enough for 50 users and 1000 attractions, and then some)
+        var addresses = seeder.ItemsToList<AddressDbM>(1100);
+        foreach (var address in addresses)
+        {
+            var randomPostalCode = seeder.FromList(postalCodes);
+            address.PostalCodeId = randomPostalCode.PostalCodeId;
+        }
+        _dbContext.Addresses.AddRange(addresses);
+        await _dbContext.SaveChangesAsync();
     
     }
 
 }
+

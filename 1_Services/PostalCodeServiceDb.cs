@@ -17,3 +17,4 @@ public class PostalCodeServiceDb : IPostalCodeService
         return await _repo.ReadAllPostalCodesAsync();
     }
 }
+
