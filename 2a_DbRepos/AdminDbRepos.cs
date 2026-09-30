@@ -104,6 +104,11 @@ public class AdminDbRepos
         }
         _dbContext.Addresses.AddRange(addresses);
         await _dbContext.SaveChangesAsync();
+
+        // Seed the attraction categories into the database
+        var categories = seeder.UniqueItemsToList<CategoryDbM>(20);
+        _dbContext.Categories.AddRange(categories);
+        await _dbContext.SaveChangesAsync();
     
     }
 
