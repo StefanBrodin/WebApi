@@ -30,6 +30,7 @@ public class AdminDbRepos
         var seeder = new SeedGenerator(fn);
 
         // Remove existing countries in the database in the right order to avoid foreign key constraint violations
+        _dbContext.AttractionCategories.RemoveRange(_dbContext.AttractionCategories);
         _dbContext.Attractions.RemoveRange(_dbContext.Attractions);
         _dbContext.Customers.RemoveRange(_dbContext.Customers);
         _dbContext.Categories.RemoveRange(_dbContext.Categories);
@@ -132,8 +133,31 @@ public class AdminDbRepos
         }
         _dbContext.Attractions.AddRange(attractions);
         await _dbContext.SaveChangesAsync();
-    
+
+        // Seed attraction categories for each attraction, so that each attraction has between 1 and 3 unique categories
+        var attractionCategories = new List<AttractionCategoryDbM>();
+        foreach (var attraction in attractions)
+        {
+            // Randomly pick between 1 and 3 unique categories for this attraction
+            int nrOfCategories = seeder.Next(1, 4);
+            var pickedCategories = seeder.UniqueItemsPickedFromList(nrOfCategories, categories);
+
+            foreach (var category in pickedCategories)
+            {
+                attractionCategories.Add(new AttractionCategoryDbM
+                {
+                    AttractionId = attraction.AttractionId,
+                    CategoryId = category.CategoryId,
+                    Seeded = true
+                });
+            }
+        }
+        _dbContext.AttractionCategories.AddRange(attractionCategories);
+        await _dbContext.SaveChangesAsync();
     }
 
 }
+
+
+
 
