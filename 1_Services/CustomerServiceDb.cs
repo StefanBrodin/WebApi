@@ -1,3 +1,5 @@
+using Models;
+using Models.DTO;
 using DbModels;
 using DbRepos;
 
@@ -15,6 +17,16 @@ public class CustomerServiceDb : ICustomerService
     public async Task<List<CustomerDbM>> ReadAllCustomersAsync()
     {
         return await _repo.ReadAllCustomersAsync();
+    }
+
+    public async Task<ResponseItemDto<ICustomer>> ReadCustomerAsync(Guid id, bool flat)
+    {
+        return await _repo.ReadCustomerAsync(id, flat);
+    }
+
+    public async Task<ResponsePageDto<ICustomer>> ReadCustomersAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    {
+        return await _repo.ReadCustomersAsync(seeded, flat, filter, pageNumber, pageSize);
     }
 }
 

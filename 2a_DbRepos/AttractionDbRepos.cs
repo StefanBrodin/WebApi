@@ -14,10 +14,10 @@ public class AttractionDbRepos
     private readonly ILogger<AttractionDbRepos> _logger;
     private readonly MainDbContext _dbContext;
 
-    public AttractionDbRepos(ILogger<AttractionDbRepos> logger, MainDbContext context)
+    public AttractionDbRepos(ILogger<AttractionDbRepos> logger, MainDbContext dbContext)
     {
         _logger = logger;
-        _dbContext = context;
+        _dbContext = dbContext;
     }
 
     // The initial rudimentary raw-read/dump of everything in the table, for testing purposes
