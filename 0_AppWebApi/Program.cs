@@ -79,6 +79,9 @@ builder.Services.AddScoped<ICategoryService, CategoryServiceDb>();
 builder.Services.AddScoped<CustomerDbRepos>();
 builder.Services.AddScoped<ICustomerService, CustomerServiceDb>();
 
+builder.Services.AddScoped<AttractionDbRepos>();
+builder.Services.AddScoped<IAttractionService, AttractionServiceDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
