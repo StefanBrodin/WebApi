@@ -67,6 +67,9 @@ builder.Services.AddScoped<ICountryService, CountryServiceDb>();
 builder.Services.AddScoped<CityDbRepos>();
 builder.Services.AddScoped<ICityService, CityServiceDb>();
 
+builder.Services.AddScoped<PostalCodeDbRepos>();
+builder.Services.AddScoped<IPostalCodeService, PostalCodeServiceDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

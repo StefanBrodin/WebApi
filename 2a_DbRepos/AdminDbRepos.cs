@@ -30,6 +30,7 @@ public class AdminDbRepos
         var seeder = new SeedGenerator(fn);
 
         // Remove existing countries in the database in the right order to avoid foreign key constraint violations
+        _dbContext.PostalCodes.RemoveRange(_dbContext.PostalCodes);
         _dbContext.Cities.RemoveRange(_dbContext.Cities);
         _dbContext.Countries.RemoveRange(_dbContext.Countries);
         await _dbContext.SaveChangesAsync();
@@ -39,8 +40,7 @@ public class AdminDbRepos
         _dbContext.Countries.AddRange(countries);
         await _dbContext.SaveChangesAsync();
 
-        // Create unique cities and assign them to random countries from the seeded countries
-        // UniqueItemsToList ensures that the cities are unique. We want 100 cities. 
+        // Seed 100 unique cities into the database, ensuring that each city has a unique name within its country
         var cities = seeder.ItemsToList<CityDbM>(100);
 
         // Keep track of the number of cities with the same name in each country to ensure uniqueness
@@ -56,7 +56,7 @@ public class AdminDbRepos
             if (cityCountInCountry.ContainsKey(key))
             {
                 cityCountInCountry[key]++;
-                
+
                 // If "Stockholm" already exists in Sweden, the next one will be "Stockholm 2", etc.
                 city.CityName = $"{city.CityName} {cityCountInCountry[key]}";
             }
@@ -68,6 +68,32 @@ public class AdminDbRepos
 
         _dbContext.Cities.AddRange(cities);
         await _dbContext.SaveChangesAsync();
+
+        // 4. Seed 200 unique postal codes into the database, ensuring that each postal code is unique within its city
+        var postalCodes = seeder.ItemsToList<PostalCodeDbM>(200);
+        var postalCodeCountInCity = new Dictionary<(Guid, string), int>();
+
+        foreach (var pc in postalCodes)
+        {
+            var randomCity = seeder.FromList(cities);
+            pc.CityId = randomCity.CityId;
+
+            var key = (pc.CityId, pc.PostalCodeNumber.Trim());
+            if (postalCodeCountInCity.ContainsKey(key))
+            {
+                postalCodeCountInCity[key]++;
+                
+                // If there's a conflict in the same city, generate a unique 5-digit number
+                pc.PostalCodeNumber = $"{seeder.Next(10000, 99999)}";
+            }
+            else
+            {
+                postalCodeCountInCity[key] = 1;
+            }
+        }
+        _dbContext.PostalCodes.AddRange(postalCodes);
+        await _dbContext.SaveChangesAsync();
+    
     }
 
 }
