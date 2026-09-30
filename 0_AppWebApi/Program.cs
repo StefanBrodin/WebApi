@@ -85,6 +85,9 @@ builder.Services.AddScoped<IAttractionService, AttractionServiceDb>();
 builder.Services.AddScoped<AttractionCategoryDbRepos>();
 builder.Services.AddScoped<IAttractionCategoryService, AttractionCategoryServiceDb>();
 
+builder.Services.AddScoped<CustomerAttractionRatingDbRepos>();
+builder.Services.AddScoped<ICustomerAttractionRatingService, CustomerAttractionRatingServiceDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
