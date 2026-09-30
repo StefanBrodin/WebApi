@@ -9,9 +9,6 @@ using Configuration.Options;
 
 using Microsoft.Extensions.Options;
 
-
-
-
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AppWebApi.Controllers
@@ -30,7 +27,6 @@ namespace AppWebApi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAdminService _service;
 
-        
         //GET: api/admin/environment
         [HttpGet()]
         [ActionName("Environment")]
@@ -69,20 +65,19 @@ namespace AppWebApi.Controllers
             }
         }
 
-
-        //GET: api/admin/seed?count={count}
+        //GET: api/admin/seed?nrItems={nrItems}
         [HttpGet()]
         [ActionName("Seed")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400, Type = typeof(string))]
-       public async Task<IActionResult> Seed(int nrItems = 10)
+        public async Task<IActionResult> Seed(int nrItems = 4)
         {
             try
             {
                 _logger.LogInformation($"{nameof(Seed)}");
                 await _service.SeedAsync(nrItems);
 
-                return Ok($"Seeded {nrItems} items successfully");
+                return Ok($"Successfully seeded {Math.Max(nrItems, 4)} countries into the database.");
             }
             catch (Exception ex)
             {
@@ -90,7 +85,6 @@ namespace AppWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         //GET: api/admin/log
         [HttpGet()]
@@ -105,7 +99,6 @@ namespace AppWebApi.Controllers
             }
             return Ok("No messages in log");
         }
-
 
         public AdminController(Encryptions encryptions, 
                     DatabaseConnections dbConnections, 
@@ -129,8 +122,6 @@ namespace AppWebApi.Controllers
             _dbConnections = dbConnections;
 
             _service = service;
-
         }
     }
 }
-

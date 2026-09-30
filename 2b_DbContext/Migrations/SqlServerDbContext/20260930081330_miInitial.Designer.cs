@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DbContext.Migrations.MySqlDbContext
+namespace DbContext.Migrations.SqlServerDbContext
 {
-    [DbContext(typeof(MainDbContext.MySqlDbContext))]
-    [Migration("20260929195716_miInitial")]
+    [DbContext(typeof(MainDbContext.SqlServerDbContext))]
+    [Migration("20260930081330_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -21,21 +21,21 @@ namespace DbContext.Migrations.MySqlDbContext
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>
                 {
                     b.Property<Guid>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PostalCodeId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
@@ -50,19 +50,22 @@ namespace DbContext.Migrations.MySqlDbContext
 
                     b.HasIndex("PostalCodeId");
 
-                    b.ToTable("Address", "supusr");
+                    b.ToTable("Address", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_StreetNameNotEmpty", "LEN(TRIM(StreetName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
                 {
                     b.Property<Guid>("AttractionId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("AttractionId", "CategoryId");
 
@@ -77,10 +80,10 @@ namespace DbContext.Migrations.MySqlDbContext
                 {
                     b.Property<Guid>("AttractionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AddressId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AttractionDescription")
                         .HasMaxLength(4000)
@@ -92,7 +95,7 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("AttractionId");
 
@@ -100,14 +103,17 @@ namespace DbContext.Migrations.MySqlDbContext
 
                     b.HasIndex("AttractionName");
 
-                    b.ToTable("Attraction", "supusr");
+                    b.ToTable("Attraction", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_AttractionNameNotEmpty", "LEN(TRIM(AttractionName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CategoryDbM", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -115,21 +121,24 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CategoryId");
 
                     b.HasIndex("CategoryName")
                         .IsUnique();
 
-                    b.ToTable("Category", "supusr");
+                    b.ToTable("Category", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CategoryNameNotEmpty", "LEN(TRIM(CategoryName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CityDbM", b =>
                 {
                     b.Property<Guid>("CityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CityName")
                         .IsRequired()
@@ -137,24 +146,27 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<Guid>("CountryId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CityId");
 
                     b.HasIndex("CountryId", "CityName")
                         .IsUnique();
 
-                    b.ToTable("City", "supusr");
+                    b.ToTable("City", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CityNameNotEmpty", "LEN(TRIM(CityName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CountryDbM", b =>
                 {
                     b.Property<Guid>("CountryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -162,21 +174,24 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CountryId");
 
                     b.HasIndex("CountryName")
                         .IsUnique();
 
-                    b.ToTable("Country", "supusr");
+                    b.ToTable("Country", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CreditCardDbM", b =>
                 {
                     b.Property<Guid>("CreditCardId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CardHolderName")
                         .HasColumnType("varchar(200)");
@@ -194,7 +209,7 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CreditCardId");
 
@@ -204,39 +219,44 @@ namespace DbContext.Migrations.MySqlDbContext
             modelBuilder.Entity("DbModels.CustomerAttractionRatingDbM", b =>
                 {
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AttractionId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RatingReview")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(200)");
 
                     b.Property<byte?>("RatingScore")
-                        .HasColumnType("tinyint unsigned");
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime>("RatingTimestamp")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CustomerId", "AttractionId");
 
                     b.HasIndex("AttractionId");
 
-                    b.ToTable("CustomerAttractionRating", "supusr");
+                    b.ToTable("CustomerAttractionRating", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_RatingHasContent", "(RatingScore IS NOT NULL) OR (RatingReview IS NOT NULL AND LEN(TRIM(RatingReview)) > 0)");
+
+                            t.HasCheckConstraint("CK_RatingScoreRange", "RatingScore BETWEEN 1 AND 5 OR RatingScore IS NULL");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.CustomerDbM", b =>
                 {
                     b.Property<Guid>("CustomerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AddressId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CustomerFirstName")
                         .HasMaxLength(30)
@@ -251,26 +271,32 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("CustomerId");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerUserName")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CustomerUserName] IS NOT NULL");
 
-                    b.ToTable("Customer", "supusr");
+                    b.ToTable("Customer", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_CustomerUserNameEmailFormat", "CustomerUserName LIKE '%@%.%'");
+
+                            t.HasCheckConstraint("CK_CustomerUserNameNotEmpty", "LEN(TRIM(CustomerUserName)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
                 {
                     b.Property<Guid>("PostalCodeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CityId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostalCodeNumber")
                         .IsRequired()
@@ -279,14 +305,17 @@ namespace DbContext.Migrations.MySqlDbContext
                         .HasColumnName("PostalCode");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("PostalCodeId");
 
                     b.HasIndex("CityId", "PostalCodeNumber")
                         .IsUnique();
 
-                    b.ToTable("PostalCode", "supusr");
+                    b.ToTable("PostalCode", "supusr", t =>
+                        {
+                            t.HasCheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0");
+                        });
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>

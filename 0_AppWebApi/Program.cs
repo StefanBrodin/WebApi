@@ -59,8 +59,10 @@ builder.Services.AddSwaggerGen(c =>
 
 //Inject DbRepos and Services
 builder.Services.AddScoped<AdminDbRepos>();
-
 builder.Services.AddScoped<IAdminService, AdminServiceDb>();
+
+builder.Services.AddScoped<CountryDbRepos>();
+builder.Services.AddScoped<ICountryService, CountryServiceDb>();
 
 var app = builder.Build();
 

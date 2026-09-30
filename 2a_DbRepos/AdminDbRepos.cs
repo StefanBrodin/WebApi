@@ -16,27 +16,27 @@ public class AdminDbRepos
     private Encryptions _encryptions;
     private readonly MainDbContext _dbContext;
 
+    public AdminDbRepos(ILogger<AdminDbRepos> logger, Encryptions encryptions, MainDbContext context)
+    {
+        _logger = logger;
+        _encryptions = encryptions;
+        _dbContext = context;
+    }
+
     public async Task SeedAsync(int nrItems)
     {
         // Create a seeder
         var fn = Path.GetFullPath(_seedSource);
         var seeder = new SeedGenerator(fn);
 
-        // Remove existing credit cards in the database
-        _dbContext.CreditCards.RemoveRange(_dbContext.CreditCards);
+        // Remove existing countries in the database
+        _dbContext.Countries.RemoveRange(_dbContext.Countries);
 
-        // Seeding new credit cards into the database
-        var creditcards = seeder.ItemsToList<CreditCardDbM>(nrItems);
-        _dbContext.CreditCards.AddRange(creditcards);
+        // Seeding at least 4 unique countries into the database
+        var countries = seeder.UniqueItemsToList<CountryDbM>(Math.Max(nrItems, 4));
+        _dbContext.Countries.AddRange(countries);
 
         // Save changes to the database
         await _dbContext.SaveChangesAsync();
-    }
-
-    public AdminDbRepos(ILogger<AdminDbRepos> logger, Encryptions encryptions, MainDbContext context)
-    {
-        _logger = logger;
-        _encryptions = encryptions;
-        _dbContext = context;
     }
 }

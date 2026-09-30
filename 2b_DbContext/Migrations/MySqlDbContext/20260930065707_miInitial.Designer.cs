@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DbContext.Migrations.SqlServerDbContext
+namespace DbContext.Migrations.MySqlDbContext
 {
-    [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260929195607_miInitial")]
+    [DbContext(typeof(MainDbContext.MySqlDbContext))]
+    [Migration("20260930065707_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -21,21 +21,21 @@ namespace DbContext.Migrations.SqlServerDbContext
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>
                 {
                     b.Property<Guid>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("PostalCodeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
@@ -50,22 +50,19 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasIndex("PostalCodeId");
 
-                    b.ToTable("Address", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_StreetNameNotEmpty", "LEN(TRIM(StreetName)) > 0");
-                        });
+                    b.ToTable("Address", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AttractionCategoryDbM", b =>
                 {
                     b.Property<Guid>("AttractionId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("AttractionId", "CategoryId");
 
@@ -80,10 +77,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     b.Property<Guid>("AttractionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("AttractionDescription")
                         .HasMaxLength(4000)
@@ -95,7 +92,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("AttractionId");
 
@@ -103,17 +100,14 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasIndex("AttractionName");
 
-                    b.ToTable("Attraction", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_AttractionNameNotEmpty", "LEN(TRIM(AttractionName)) > 0");
-                        });
+                    b.ToTable("Attraction", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CategoryDbM", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -121,24 +115,21 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CategoryId");
 
                     b.HasIndex("CategoryName")
                         .IsUnique();
 
-                    b.ToTable("Category", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_CategoryNameNotEmpty", "LEN(TRIM(CategoryName)) > 0");
-                        });
+                    b.ToTable("Category", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CityDbM", b =>
                 {
                     b.Property<Guid>("CityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CityName")
                         .IsRequired()
@@ -146,27 +137,24 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CityId");
 
                     b.HasIndex("CountryId", "CityName")
                         .IsUnique();
 
-                    b.ToTable("City", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_CityNameNotEmpty", "LEN(TRIM(CityName)) > 0");
-                        });
+                    b.ToTable("City", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CountryDbM", b =>
                 {
                     b.Property<Guid>("CountryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -174,24 +162,21 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CountryId");
 
                     b.HasIndex("CountryName")
                         .IsUnique();
 
-                    b.ToTable("Country", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0");
-                        });
+                    b.ToTable("Country", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CreditCardDbM", b =>
                 {
                     b.Property<Guid>("CreditCardId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CardHolderName")
                         .HasColumnType("varchar(200)");
@@ -209,7 +194,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CreditCardId");
 
@@ -219,44 +204,39 @@ namespace DbContext.Migrations.SqlServerDbContext
             modelBuilder.Entity("DbModels.CustomerAttractionRatingDbM", b =>
                 {
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("AttractionId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("RatingReview")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(200)");
 
                     b.Property<byte?>("RatingScore")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<DateTime>("RatingTimestamp")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CustomerId", "AttractionId");
 
                     b.HasIndex("AttractionId");
 
-                    b.ToTable("CustomerAttractionRating", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_RatingHasContent", "(RatingScore IS NOT NULL) OR (RatingReview IS NOT NULL AND LEN(TRIM(RatingReview)) > 0)");
-
-                            t.HasCheckConstraint("CK_RatingScoreRange", "RatingScore BETWEEN 1 AND 5 OR RatingScore IS NULL");
-                        });
+                    b.ToTable("CustomerAttractionRating", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.CustomerDbM", b =>
                 {
                     b.Property<Guid>("CustomerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid?>("AddressId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CustomerFirstName")
                         .HasMaxLength(30)
@@ -271,32 +251,26 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("CustomerId");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("CustomerUserName")
-                        .IsUnique()
-                        .HasFilter("[CustomerUserName] IS NOT NULL");
+                        .IsUnique();
 
-                    b.ToTable("Customer", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_CustomerUserNameEmailFormat", "CustomerUserName LIKE '%@%.%'");
-
-                            t.HasCheckConstraint("CK_CustomerUserNameNotEmpty", "LEN(TRIM(CustomerUserName)) > 0");
-                        });
+                    b.ToTable("Customer", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.PostalCodeDbM", b =>
                 {
                     b.Property<Guid>("PostalCodeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("PostalCodeNumber")
                         .IsRequired()
@@ -305,17 +279,14 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnName("PostalCode");
 
                     b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("PostalCodeId");
 
                     b.HasIndex("CityId", "PostalCodeNumber")
                         .IsUnique();
 
-                    b.ToTable("PostalCode", "supusr", t =>
-                        {
-                            t.HasCheckConstraint("CK_PostalCodeNotEmpty", "LEN(TRIM(PostalCode)) > 0");
-                        });
+                    b.ToTable("PostalCode", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>
