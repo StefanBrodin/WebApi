@@ -64,6 +64,9 @@ builder.Services.AddScoped<IAdminService, AdminServiceDb>();
 builder.Services.AddScoped<CountryDbRepos>();
 builder.Services.AddScoped<ICountryService, CountryServiceDb>();
 
+builder.Services.AddScoped<CityDbRepos>();
+builder.Services.AddScoped<ICityService, CityServiceDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

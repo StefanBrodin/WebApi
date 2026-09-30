@@ -29,14 +29,45 @@ public class AdminDbRepos
         var fn = Path.GetFullPath(_seedSource);
         var seeder = new SeedGenerator(fn);
 
-        // Remove existing countries in the database
+        // Remove existing countries in the database in the right order to avoid foreign key constraint violations
+        _dbContext.Cities.RemoveRange(_dbContext.Cities);
         _dbContext.Countries.RemoveRange(_dbContext.Countries);
+        await _dbContext.SaveChangesAsync();
 
-        // Seeding at least 4 unique countries into the database
+        // Seeding at least 4 unique countries into the database and saving them
         var countries = seeder.UniqueItemsToList<CountryDbM>(Math.Max(nrItems, 4));
         _dbContext.Countries.AddRange(countries);
+        await _dbContext.SaveChangesAsync();
 
-        // Save changes to the database
+        // Create unique cities and assign them to random countries from the seeded countries
+        // UniqueItemsToList ensures that the cities are unique. We want 100 cities. 
+        var cities = seeder.ItemsToList<CityDbM>(100);
+
+        // Keep track of the number of cities with the same name in each country to ensure uniqueness
+        var cityCountInCountry = new Dictionary<(Guid, string), int>();
+
+        foreach (var city in cities)
+        {
+            var randomCountry = seeder.FromList(countries);
+            city.CountryId = randomCountry.CountryId;
+
+            var key = (city.CountryId, city.CityName.ToLower().Trim());
+
+            if (cityCountInCountry.ContainsKey(key))
+            {
+                cityCountInCountry[key]++;
+                
+                // If "Stockholm" already exists in Sweden, the next one will be "Stockholm 2", etc.
+                city.CityName = $"{city.CityName} {cityCountInCountry[key]}";
+            }
+            else
+            {
+                cityCountInCountry[key] = 1;
+            }
+        }
+
+        _dbContext.Cities.AddRange(cities);
         await _dbContext.SaveChangesAsync();
     }
+
 }
