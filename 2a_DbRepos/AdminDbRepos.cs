@@ -30,6 +30,8 @@ public class AdminDbRepos
         var seeder = new SeedGenerator(fn);
 
         // Remove existing countries in the database in the right order to avoid foreign key constraint violations
+        _dbContext.Customers.RemoveRange(_dbContext.Customers);
+        _dbContext.Categories.RemoveRange(_dbContext.Categories);
         _dbContext.Addresses.RemoveRange(_dbContext.Addresses);
         _dbContext.PostalCodes.RemoveRange(_dbContext.PostalCodes);
         _dbContext.Cities.RemoveRange(_dbContext.Cities);
@@ -108,6 +110,16 @@ public class AdminDbRepos
         // Seed the attraction categories into the database
         var categories = seeder.UniqueItemsToList<CategoryDbM>(20);
         _dbContext.Categories.AddRange(categories);
+        await _dbContext.SaveChangesAsync();
+
+        // Seed 50 customers and link them to addresses (there are enough seeded addresses for 50 users)
+        var customers = seeder.UniqueItemsToList<CustomerDbM>(50);
+        foreach (var customer in customers)
+        {
+            var randomAddress = seeder.FromList(addresses);
+            customer.AddressId = randomAddress.AddressId;
+        }
+        _dbContext.Customers.AddRange(customers);
         await _dbContext.SaveChangesAsync();
     
     }

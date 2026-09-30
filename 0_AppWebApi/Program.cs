@@ -76,6 +76,9 @@ builder.Services.AddScoped<IAddressService, AddressServiceDb>();
 builder.Services.AddScoped<CategoryDbRepos>();
 builder.Services.AddScoped<ICategoryService, CategoryServiceDb>();
 
+builder.Services.AddScoped<CustomerDbRepos>();
+builder.Services.AddScoped<ICustomerService, CustomerServiceDb>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
