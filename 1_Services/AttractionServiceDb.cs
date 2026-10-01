@@ -36,4 +36,21 @@ public class AttractionServiceDb : IAttractionService
     }
 
 
+    // CRUD methods delegating to DbRepos
+    public async Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto itemDto)
+    {
+        return await _repo.CreateAttractionAsync(itemDto);
+    }
+
+    public async Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto itemDto)
+    {
+        return await _repo.UpdateAttractionAsync(itemDto);
+    }
+
+    public async Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)
+    {
+        return await _repo.DeleteAttractionAsync(id);
+    }
+    
 }
+

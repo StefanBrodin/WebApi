@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 using Seido.Utilities.SeedGenerator;
 using Models;
+using Models.DTO;
 
 namespace DbModels;
 
@@ -69,6 +70,26 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>, IEquatable<Attrac
     #region constructors
     public AttractionDbM() : base() { }
     public AttractionDbM(Attraction org) : base(org) { }
+
+    // Constructor to instantiate a database model from a CU-DTO
+    public AttractionDbM(AttractionCuDto org)
+    {
+        AttractionId = org.AttractionId ?? Guid.NewGuid();
+        AttractionName = org.AttractionName;
+        AttractionDescription = org.AttractionDescription;
+        AddressId = org.AddressId ?? Guid.Empty;
+        Seeded = false; // Not seeded when user created
+    }
+    #endregion
+
+    #region Update from DTO
+    // Updates only scalar properties in-place, leaving navigation properties to the repository
+    public AttractionDbM UpdateFromDTO(AttractionCuDto org)
+    {
+        AttractionName = org.AttractionName;
+        AttractionDescription = org.AttractionDescription;
+        return this;
+    }
     #endregion
 
     #region randomly seed this instance
@@ -78,4 +99,7 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>, IEquatable<Attrac
         return this;
     }
     #endregion
+    
 }
+
+

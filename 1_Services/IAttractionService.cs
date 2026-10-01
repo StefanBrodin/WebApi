@@ -16,6 +16,13 @@ public interface IAttractionService
     // The view showing attractions without reviews 
     public Task<ResponsePageDto<AttractionWithoutReviewsDto>> ReadAttractionsWithoutReviewsAsync(bool seeded, string filter, int pageNumber, int pageSize);
 
+    // CRUD operations
+    public Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto itemDto);
+
+    public Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto itemDto);
+
+    public Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id);
+
 }
 
 
