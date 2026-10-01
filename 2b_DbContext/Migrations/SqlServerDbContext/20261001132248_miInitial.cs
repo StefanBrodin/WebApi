@@ -45,23 +45,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                 });
 
             migrationBuilder.CreateTable(
-                name: "CreditCards",
-                columns: table => new
-                {
-                    CreditCardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Issuer = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ExpirationYear = table.Column<string>(type: "varchar(200)", nullable: true),
-                    ExpirationMonth = table.Column<string>(type: "varchar(200)", nullable: true),
-                    CardHolderName = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Seeded = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CreditCards", x => x.CreditCardId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "City",
                 schema: "supusr",
                 columns: table => new
@@ -327,9 +310,6 @@ namespace DbContext.Migrations.SqlServerDbContext
             migrationBuilder.DropTable(
                 name: "AttractionCategory",
                 schema: "supusr");
-
-            migrationBuilder.DropTable(
-                name: "CreditCards");
 
             migrationBuilder.DropTable(
                 name: "CustomerAttractionRating",

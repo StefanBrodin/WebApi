@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 using Seido.Utilities.SeedGenerator;
 using Models;
+using Models.DTO;
 
 namespace DbModels;
 
@@ -58,10 +59,34 @@ public class CustomerDbM : Customer, ISeed<CustomerDbM>, IEquatable<CustomerDbM>
     public List<CustomerAttractionRatingDbM> CustomerAttractionRatingsDbM { get; set; } = new();
     #endregion
 
-    #region constructors
+
+  #region constructors
     public CustomerDbM() : base() { }
     public CustomerDbM(Customer org) : base(org) { }
+
+    // Constructor to create DbM from CuDto
+    public CustomerDbM(CustomerCuDto org)
+    {
+        CustomerId = org.CustomerId ?? Guid.NewGuid();
+        CustomerFirstName = org.CustomerFirstName;
+        CustomerLastName = org.CustomerLastName;
+        CustomerUserName = org.CustomerUserName;
+        AddressId = org.AddressId ?? Guid.Empty;
+        Seeded = false; // User-created items are not seeded test data
+    }
     #endregion
+
+
+    #region Update from DTO
+    public CustomerDbM UpdateFromDTO(CustomerCuDto org)
+    {
+        CustomerFirstName = org.CustomerFirstName;
+        CustomerLastName = org.CustomerLastName;
+        CustomerUserName = org.CustomerUserName;
+        return this;
+    }
+    #endregion
+
 
     #region randomly seed this instance
     public new CustomerDbM Seed(SeedGenerator seeder)

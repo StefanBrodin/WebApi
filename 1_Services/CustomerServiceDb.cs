@@ -3,6 +3,7 @@ using Models.DTO;
 using DbModels;
 using DbRepos;
 
+
 namespace Services;
 
 public class CustomerServiceDb : ICustomerService
@@ -28,6 +29,13 @@ public class CustomerServiceDb : ICustomerService
     {
         return await _repo.ReadCustomersAsync(seeded, flat, filter, pageNumber, pageSize);
     }
+
+    public async Task<ResponseItemDto<ICustomer>> CreateCustomerAsync(CustomerCuDto itemDto)
+    => await _repo.CreateCustomerAsync(itemDto);
+
+    public async Task<ResponseItemDto<ICustomer>> DeleteCustomerAsync(Guid id)
+    => await _repo.DeleteCustomerAsync(id);
+
 }
 
 

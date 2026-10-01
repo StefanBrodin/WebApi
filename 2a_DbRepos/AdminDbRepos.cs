@@ -158,27 +158,33 @@ public class AdminDbRepos
         _dbContext.AttractionCategories.AddRange(attractionCategories);
         await _dbContext.SaveChangesAsync();
 
-        // Seed customer attraction ratings, so that each customer has rated between 5 and 15 unique attractions
+        // Seed customer attraction ratings (each attraction gets between 0 and 20 reviews)
         var ratings = new List<CustomerAttractionRatingDbM>();
-        foreach (var customer in customers)
+
+        foreach (var attraction in attractions)
         {
-            int nrOfRatings = seeder.Next(5, 16);
-            var reviewedAttractions = seeder.UniqueItemsPickedFromList(nrOfRatings, attractions);
+            // Randomize the number of ratings *for this* attraction (between 0 and 20)
+            int nrOfRatings = seeder.Next(0, 21);
 
-            foreach (var attraction in reviewedAttractions)
+            if (nrOfRatings > 0)
             {
-                var rating = new CustomerAttractionRatingDbM
-                {
-                    CustomerId = customer.CustomerId,
-                    AttractionId = attraction.AttractionId,
-                    RatingScore = (byte)seeder.Next(1, 6), // Score between 1 and 5
-                    RatingReview = seeder.Bool ? seeder.LatinSentence : null, // Some ratings have reviews, some just scores
-                    Seeded = true
-                };
+                // Pick 'nrOfRatings' unique customers who have written these reviews
+                var commentingCustomers = seeder.UniqueItemsPickedFromList(nrOfRatings, customers);
 
-                ratings.Add(rating);
+                foreach (var customer in commentingCustomers)
+                {
+                    ratings.Add(new CustomerAttractionRatingDbM
+                    {
+                        AttractionId = attraction.AttractionId,
+                        CustomerId = customer.CustomerId,
+                        RatingScore = (byte)seeder.Next(1, 6),
+                        RatingReview = seeder.LatinSentence, // Garanterar en kommentar
+                        Seeded = true
+                    });
+                }
             }
         }
+
         _dbContext.CustomerAttractionRatings.AddRange(ratings);
         await _dbContext.SaveChangesAsync();
 

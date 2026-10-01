@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20261001003042_miInitial")]
+    [Migration("20261001132248_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -185,35 +185,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                         {
                             t.HasCheckConstraint("CK_CountryNameNotEmpty", "LEN(TRIM(CountryName)) > 0");
                         });
-                });
-
-            modelBuilder.Entity("DbModels.CreditCardDbM", b =>
-                {
-                    b.Property<Guid>("CreditCardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CardHolderName")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("ExpirationMonth")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("ExpirationYear")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("Issuer")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Number")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("Seeded")
-                        .HasColumnType("bit");
-
-                    b.HasKey("CreditCardId");
-
-                    b.ToTable("CreditCards");
                 });
 
             modelBuilder.Entity("DbModels.CustomerAttractionRatingDbM", b =>

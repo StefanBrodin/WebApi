@@ -89,4 +89,58 @@ public class CustomerController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    // POST: /api/Customer/CreateItem
+    // Body: CustomerCuDto in JSON
+    [HttpPost("CreateItem")]
+    [ProducesResponseType(200, Type = typeof(ResponseItemDto<ICustomer>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> CreateItem([FromBody] CustomerCuDto item)
+    {
+        try
+        {
+            item.EnsureValidity();
+            _logger.LogInformation($"{nameof(CreateItem)}: Creating customer {item.CustomerUserName}");
+
+            var result = await _service.CreateCustomerAsync(item);
+            _logger.LogInformation($"Customer {result.Item.CustomerId} created successfully");
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not create customer");
+            return BadRequest($"Could not create. Error: {ex.Message}");
+        }
+    }
+
+
+    // DELETE: /api/Customer/DeleteItem/{id}
+    [HttpDelete("DeleteItem/{id}")]
+    [ProducesResponseType(200, Type = typeof(ResponseItemDto<ICustomer>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> DeleteItem(string id)
+    {
+        try
+        {
+            var idArg = Guid.Parse(id);
+            _logger.LogInformation($"{nameof(DeleteItem)}: Deleting customer {idArg}");
+
+            var result = await _service.DeleteCustomerAsync(idArg);
+            _logger.LogInformation($"Customer {idArg} deleted successfully");
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not delete customer");
+            return BadRequest($"Could not delete. Error: {ex.Message}");
+        }
+    }
+
+    
 }
+
+
+
+

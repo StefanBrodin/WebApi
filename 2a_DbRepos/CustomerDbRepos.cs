@@ -121,6 +121,58 @@ public class CustomerDbRepos
 
         return ret;
     }
+
+    // Navigation property helper: connects AddressId to AddressDbM
+    private async Task navProp_CustomerCUdto_to_CustomerDbM(CustomerCuDto itemDtoSrc, CustomerDbM itemDst)
+    {
+        if (itemDtoSrc.AddressId != null)
+        {
+            var address = await _dbContext.Addresses.FirstOrDefaultAsync(a => a.AddressId == itemDtoSrc.AddressId);
+            if (address == null) throw new ArgumentException($"Address id {itemDtoSrc.AddressId} does not exist");
+            itemDst.AddressDbM = address;
+            itemDst.AddressId = address.AddressId;
+        }
+    }
+
+    // Create a new Customer
+    public async Task<ResponseItemDto<ICustomer>> CreateCustomerAsync(CustomerCuDto itemDto)
+    {
+        if (itemDto.CustomerId != null)
+            throw new ArgumentException($"{nameof(itemDto.CustomerId)} must be null when creating a new object");
+
+        var item = new CustomerDbM(itemDto);
+
+        // Connect navigation properties
+        await navProp_CustomerCUdto_to_CustomerDbM(itemDto, item);
+
+        _dbContext.Customers.Add(item);
+        await _dbContext.SaveChangesAsync();
+
+        return await ReadCustomerAsync(item.CustomerId, false);
+    }
+
+    // Delete Customer and automatically cascade delete their ratings
+    public async Task<ResponseItemDto<ICustomer>> DeleteCustomerAsync(Guid id)
+    {
+        var item = await _dbContext.Customers
+            .Include(c => c.CustomerAttractionRatingsDbM)
+            .FirstOrDefaultAsync(c => c.CustomerId == id);
+
+        if (item == null) throw new ArgumentException($"Customer {id} does not exist");
+
+        // CustomerAttractionRating has Cascade Delete configured, so related reviews are removed automatically
+        _dbContext.Customers.Remove(item);
+        await _dbContext.SaveChangesAsync();
+
+        return new ResponseItemDto<ICustomer>
+        {
+#if DEBUG
+            ConnectionString = _dbContext.Database.GetConnectionString(),
+#endif
+            Item = item
+        };
+    }
+    
 }
 
 

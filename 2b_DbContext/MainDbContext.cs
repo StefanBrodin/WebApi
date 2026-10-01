@@ -29,7 +29,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     // Models of the database tables are defined here as DbSet<T> properties
     #region C# model of database tables
-    public DbSet<CreditCardDbM> CreditCards { get; set; }
+
     public DbSet<CountryDbM> Countries { get; set; }
     public DbSet<CityDbM> Cities { get; set; }
     public DbSet<PostalCodeDbM> PostalCodes { get; set; }
@@ -82,7 +82,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.Entity<DatabaseOverviewDto>()
             .ToView("vw_Database_Overview", "supusr")
             .HasNoKey();
-                
+
         #endregion
     }
 

@@ -38,7 +38,7 @@ och konfigurerades i `MainDbContext` så strukturerades koden enligt följande p
 3. **Data Annotations & Dataintegritet:**
    För att tvinga fram databasens `NOT NULL` och kolumntyper direkt från C#-koden har Data Annotations använts:
    - `[Required]` används på alla obligatoriska strängar och främmande nycklar.
-   - `[MaxLength(200)]` styr att strängar inte blir godtyckliga `nvarchar(max)`, vilket optimerar lagring och prestanda.
+   - `[MaxLength]` (till exempel `[MaxLength(200)]`) styr att strängar inte blir godtyckliga `nvarchar(max)`, vilket optimerar lagring och prestanda.
    - Valfria fält (som `StreetNumber` och `RatingReview`) definieras som nullable (`string?`) för att matcha databasens `NULL`-tillåtelse.
 
 4. **Seeding och hantering av testdata:**
@@ -48,3 +48,14 @@ och konfigurerades i `MainDbContext` så strukturerades koden enligt följande p
 5. **SQL Server Check Constraints via EF Core:**
    Villkor som inte kan uttryckas med vanliga C#-attribut (exempelvis att `RatingScore` måste ligga mellan 1 och 5, samt att e-postformat 
    valideras) lades till via `ToTable(t => t.HasCheckConstraint(...))` i `SqlServerDbContext.OnModelCreating`.
+
+6. **Databassidor och vyer (SQL Views):**
+För att inte belasta API:et med onödigt tunga joins i C# skapades två SQL-vyer i databasen: en för att räkna 
+samman en snabb översikt av innehållet (antal användare, orter och sevärdheter), och en som filtrerar fram 
+sevärdheter som helt saknar recensioner. I C# modellerades dessa som vanliga DTO-klasser och kopplades 
+enkelt in i `MainDbContext` med `.ToView(...)` och `.HasNoKey()`.
+
+7. **Upprensning med Stored Procedure:**
+   För att snabbt kunna nollställa all genererad testdata utan att råka radera "riktiga" användare skapades en 
+   stored procedure (`sp_RemoveSeed`). Den tar bort data i rätt ordning baklänges genom tabellerna så att inga 
+   foreign key-regler protesterar. Från API:et anropas proceduren smidigt via EF Cores `ExecuteSqlInterpolatedAsync`.
