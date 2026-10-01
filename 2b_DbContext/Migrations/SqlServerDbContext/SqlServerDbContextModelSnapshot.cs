@@ -343,6 +343,22 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.ToView("vw_Attractions_Without_Reviews", "supusr");
                 });
 
+            modelBuilder.Entity("Models.DTO.DatabaseOverviewDto", b =>
+                {
+                    b.Property<int>("NrAttractions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCities")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCustomers")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_Database_Overview", "supusr");
+                });
+
             modelBuilder.Entity("DbModels.AddressDbM", b =>
                 {
                     b.HasOne("DbModels.PostalCodeDbM", "PostalCodeDbM")

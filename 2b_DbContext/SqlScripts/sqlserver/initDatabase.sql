@@ -21,5 +21,12 @@ WHERE NOT EXISTS (
 );
 GO
 
-
+-- View: Database overview (Number of Users, Cities, and Attractions)
+CREATE OR ALTER VIEW supusr.vw_Database_Overview
+AS
+SELECT 
+    (SELECT COUNT(*) FROM supusr.Customer) AS NrCustomers,
+    (SELECT COUNT(*) FROM supusr.City) AS NrCities,
+    (SELECT COUNT(*) FROM supusr.Attraction) AS NrAttractions;
+GO
 

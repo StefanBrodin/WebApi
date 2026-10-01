@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260930230606_miInitial")]
+    [Migration("20260930235630_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -344,6 +344,22 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.ToTable((string)null);
 
                     b.ToView("vw_Attractions_Without_Reviews", "supusr");
+                });
+
+            modelBuilder.Entity("Models.DTO.DatabaseOverviewDto", b =>
+                {
+                    b.Property<int>("NrAttractions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCities")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCustomers")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_Database_Overview", "supusr");
                 });
 
             modelBuilder.Entity("DbModels.AddressDbM", b =>

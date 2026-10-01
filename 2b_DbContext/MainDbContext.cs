@@ -45,6 +45,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     #region model the Views
     public DbSet<AttractionWithoutReviewsDto> AttractionsWithoutReviewsView { get; set; }
+    public DbSet<DatabaseOverviewDto> DatabaseOverviewView { get; set; }
 
     #endregion
 
@@ -77,6 +78,11 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.Entity<AttractionWithoutReviewsDto>()
             .ToView("vw_Attractions_Without_Reviews", "supusr")
             .HasNoKey();
+
+        modelBuilder.Entity<DatabaseOverviewDto>()
+            .ToView("vw_Database_Overview", "supusr")
+            .HasNoKey();
+                
         #endregion
     }
 

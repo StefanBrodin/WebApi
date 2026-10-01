@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
 using DbRepos;
+using Models.DTO;
 
 namespace Services;
     
@@ -21,4 +22,10 @@ public class AdminServiceDb : IAdminService
         _logger = logger;
     }
     #endregion
+
+    public async Task<ResponseItemDto<DatabaseOverviewDto>> GetDatabaseOverviewAsync()
+    {
+        return await _repo.GetDatabaseOverviewAsync();
+    }
+    
 }

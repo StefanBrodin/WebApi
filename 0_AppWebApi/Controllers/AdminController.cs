@@ -8,6 +8,7 @@ using Configuration;
 using Configuration.Options;
 
 using Microsoft.Extensions.Options;
+using Models.DTO;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -123,5 +124,25 @@ namespace AppWebApi.Controllers
 
             _service = service;
         }
+
+        //GET: api/admin/databaseoverview
+        [HttpGet()]
+        [ActionName("DatabaseOverview")]
+        [ProducesResponseType(200, Type = typeof(ResponseItemDto<DatabaseOverviewDto>))]
+        public async Task<ActionResult<ResponseItemDto<DatabaseOverviewDto>>> DatabaseOverview()
+        {
+            try
+            {
+                var result = await _service.GetDatabaseOverviewAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching database overview view");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

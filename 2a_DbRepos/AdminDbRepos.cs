@@ -7,6 +7,8 @@ using DbModels;
 using DbContext;
 using Configuration;
 
+using Models.DTO;
+
 namespace DbRepos;
 
 public class AdminDbRepos
@@ -203,6 +205,18 @@ public class AdminDbRepos
                 }
             }
         }
+    }
+
+    public async Task<ResponseItemDto<DatabaseOverviewDto>> GetDatabaseOverviewAsync()
+    {
+        var overview = await _dbContext.DatabaseOverviewView.FirstAsync();
+        return new ResponseItemDto<DatabaseOverviewDto>()
+        {
+#if DEBUG
+            ConnectionString = _dbContext.Database.GetConnectionString(),
+#endif
+            Item = overview
+        };
     }
 
 }
