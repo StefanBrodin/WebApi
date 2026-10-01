@@ -219,6 +219,17 @@ public class AdminDbRepos
         };
     }
 
+    public async Task<ResponseItemDto<DatabaseOverviewDto>> RemoveSeedAsync(bool seeded)
+    {
+        // Run the stored procedure to remove seeded data
+        await _dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC supusr.sp_RemoveSeed @seeded = {seeded}");
+
+        // Return the database overview after removing the seeded data
+        return await GetDatabaseOverviewAsync();
+    }
+
+
+
 }
 
 

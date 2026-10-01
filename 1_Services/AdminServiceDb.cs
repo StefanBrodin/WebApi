@@ -27,5 +27,10 @@ public class AdminServiceDb : IAdminService
     {
         return await _repo.GetDatabaseOverviewAsync();
     }
-    
+
+    public async Task<ResponseItemDto<DatabaseOverviewDto>> RemoveSeedAsync(bool seeded)
+    {
+        return await _repo.RemoveSeedAsync(seeded);
+    }
+
 }
