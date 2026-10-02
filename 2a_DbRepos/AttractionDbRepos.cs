@@ -184,7 +184,7 @@ public class AttractionDbRepos
     // Helper method resolving navigation properties based on the CU-DTO
     private async Task navProp_AttractionCUdto_to_AttractionDbM(AttractionCuDto itemDtoSrc, AttractionDbM itemDst)
     {
-        // 1. Resolve Address
+        // 1. Resolve Address 
         if (itemDtoSrc.AddressId != null && itemDtoSrc.AddressId != Guid.Empty)
         {
             var address = await _dbContext.Addresses.FirstOrDefaultAsync(a => a.AddressId == itemDtoSrc.AddressId);
@@ -198,6 +198,12 @@ public class AttractionDbRepos
         // 2. Resolve many-to-many relationship with Categories
         if (itemDtoSrc.CategoryIds != null)
         {
+            if (itemDst.AttractionCategoriesDbM != null && itemDst.AttractionCategoriesDbM.Count > 0)
+            {
+                _dbContext.AttractionCategories.RemoveRange(itemDst.AttractionCategoriesDbM);
+                itemDst.AttractionCategoriesDbM.Clear();
+            }
+
             var categories = new List<AttractionCategoryDbM>();
             foreach (var catId in itemDtoSrc.CategoryIds)
             {
@@ -215,6 +221,7 @@ public class AttractionDbRepos
             }
             itemDst.AttractionCategoriesDbM = categories;
         }
+    
     }
     #endregion
 
@@ -289,4 +296,5 @@ public class AttractionDbRepos
     }
 
 }
+
 

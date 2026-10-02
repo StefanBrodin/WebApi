@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Seido.Utilities.SeedGenerator;
 using Models;
 
+using Models.DTO;
+
 namespace DbModels;
 
 [Table("CustomerAttractionRating", Schema = "supusr")]
@@ -64,6 +66,26 @@ public class CustomerAttractionRatingDbM : CustomerAttractionRating, ISeed<Custo
     #region constructors
     public CustomerAttractionRatingDbM() : base() { }
     public CustomerAttractionRatingDbM(CustomerAttractionRating org) : base(org) { }
+
+    public CustomerAttractionRatingDbM(CustomerAttractionRatingCuDto org)
+    {
+        CustomerId = org.CustomerId;
+        AttractionId = org.AttractionId;
+        RatingScore = org.RatingScore;
+        RatingReview = org.RatingReview;
+        RatingTimestamp = DateTime.UtcNow;
+        Seeded = false; // Not seeded when user created
+    }
+    #endregion
+
+    #region Update from DTO
+    public CustomerAttractionRatingDbM UpdateFromDTO(CustomerAttractionRatingCuDto org)
+    {
+        RatingScore = org.RatingScore;
+        RatingReview = org.RatingReview;
+        RatingTimestamp = DateTime.UtcNow;
+        return this;
+    }
     #endregion
 
     #region randomly seed this instance
@@ -73,4 +95,7 @@ public class CustomerAttractionRatingDbM : CustomerAttractionRating, ISeed<Custo
         return this;
     }
     #endregion
+
 }
+
+
