@@ -1,15 +1,23 @@
 # Attraction Rating App
+Stefan Brodin
 
-Det här projektet fokuserar på Microsoft SQL Server. Det bygger i och för sig för SQL Server, MySQL/MariaDb och Postgres 
-utan att krascha, men Check Constraints i Fluent API är i en syntax som är anpassad för Microsoft SQL Server.
+**OBS!** Det här projektet fokuserar på **Microsoft SQL Server**!
+
+GitHub: https://github.com/StefanBrodin/WebApi.git
+Anslutningssträngar och nycklar finns i [secrets.json](./secrets.json) i rotmappen (om man läser detta från .zip-filen).
+
 
 ### Modellering i C# för Entity Framework Core (DbModels)
 
-<p><a href="./ER-diagram.png" target="_blank">
-  <img src="./ER-diagram.png" alt="ERD Diagram med Crow-foot notation" width="600" />
-</a>
-<br/>
-<sub><i>Klicka på diagrammet för att öppna och zooma i full upplösning.</i></sub></p>
+<p>
+   <a href="./ER-diagram.png" target="_blank">
+      <img src="./ER-diagram.png" alt="ERD Diagram med Crow-foot notation" width="600" />
+   </a>
+   <br/>
+   <sub>
+      <i>Klicka på diagrammet för att öppna och zooma i full upplösning.</i>
+   </sub>
+</p>
 
 Jag har utgått från samma SQL-databas som jag skapade i SQL-kursen. När ER-diagrammet gjordes om till C#-klasser i `2c_DbModels` 
 och konfigurerades i `MainDbContext` så strukturerades koden enligt följande principer:
@@ -50,12 +58,46 @@ och konfigurerades i `MainDbContext` så strukturerades koden enligt följande p
    valideras) lades till via `ToTable(t => t.HasCheckConstraint(...))` i `SqlServerDbContext.OnModelCreating`.
 
 6. **Databassidor och vyer (SQL Views):**
-För att inte belasta API:et med onödigt tunga joins i C# skapades två SQL-vyer i databasen: en för att räkna 
-samman en snabb översikt av innehållet (antal användare, orter och sevärdheter), och en som filtrerar fram 
-sevärdheter som helt saknar recensioner. I C# modellerades dessa som vanliga DTO-klasser och kopplades 
-enkelt in i `MainDbContext` med `.ToView(...)` och `.HasNoKey()`.
+   För att inte belasta API:et med onödigt tunga joins i C# skapades två SQL-vyer i databasen: en för att räkna 
+   samman en snabb översikt av innehållet (antal användare, orter och sevärdheter), och en som filtrerar fram 
+   sevärdheter som helt saknar recensioner. I C# modellerades dessa som vanliga DTO-klasser och kopplades 
+   enkelt in i `MainDbContext` med `.ToView(...)` och `.HasNoKey()`.
 
 7. **Upprensning med Stored Procedure:**
    För att snabbt kunna nollställa all genererad testdata utan att råka radera "riktiga" användare skapades en 
    stored procedure (`sp_RemoveSeed`). Den tar bort data i rätt ordning baklänges genom tabellerna så att inga 
    foreign key-regler protesterar. Från API:et anropas proceduren smidigt via EF Cores `ExecuteSqlInterpolatedAsync`.
+
+8. **CRUD-operationer & CU-DTO-mönstret:**
+   För att skapa och uppdatera entiteter på ett säkert sätt används dedikerade *Create/Update Data Transfer Objects* 
+   (`AttractionCuDto`, `CustomerCuDto`, `CustomerAttractionRatingCuDto`).
+   - Dessa DTO:er kapslar in nödvändiga fält och refererar relationer via ID:n (`AddressId`, `CategoryIds`).
+   - I repository-lagret används metoder av typen `navProp_...` för att asynkront slå upp och validera främmande nycklar innan entiteten skrivs till databasen i en Unit of Work (`SaveChangesAsync`).
+   - `Attraction` kan uppdateras vad gäller rubrik, beskrivning, kategorier (`CategoryIds`) samt ort/land via dess adresskoppling (`AddressId`).
+
+9. **Kaskadborttagning (`Cascade Delete`):**
+   För att upprätthålla absolut referensintegritet och förhindra herrelösa recensioner:
+   - Raderas en **kund** (`Customer`), så raderas automatiskt alla kommentarer och betyg som kunden har lämnat via `[DeleteBehavior(DeleteBehavior.Cascade)]`.
+   - Raderas en **sevärdhet** (`Attraction`), raderas automatiskt alla tillhörande betyg (`CustomerAttractionRating`) och kategorikopplingar (`AttractionCategory`).
+
+---
+
+### Översikt över Web API Endpoints
+
+| Område | Metod | Endpoint | Beskrivning |
+| :--- | :--- | :--- | :--- |
+| **Admin** | GET | `/api/Admin/DatabaseOverview` | Hämtar antal användare, orter och sevärdheter via SQL View |
+| **Admin** | GET | `/api/Admin/Seed?nrItems=4` | Fyller databasen med testdata |
+| **Admin** | GET | `/api/Admin/RemoveSeed?seeded=true` | Tömmer testdata via lagrad procedur (`sp_RemoveSeed`) |
+| **Customer** | GET | `/api/Customer/Read` | Hämtar paginerad lista med kunder |
+| **Customer** | GET | `/api/Customer/ReadWithReviews` | Hämtar kunder tillsammans med alla deras inlagda recensioner |
+| **Customer** | POST | `/api/Customer/CreateItem` | Skapar en ny kund i databasen |
+| **Customer** | DELETE | `/api/Customer/DeleteItem/{id}` | Raderar en kund och kaskadraderar alla dess recensioner |
+| **Attraction** | GET | `/api/Attraction/Read` | Hämtar sevärdheter med filter (kategori, namn, beskrivning, ort, land) |
+| **Attraction** | GET | `/api/Attraction/ReadWithoutReviews`| Hämtar sevärdheter som saknar kommentarer via SQL View |
+| **Attraction** | GET | `/api/Attraction/ReadItem?id=...` | Hämtar en sevärdhet med kategori, beskrivning och alla recensioner |
+| **Attraction** | POST | `/api/Attraction/CreateItem` | Skapar en ny sevärdhet |
+| **Attraction** | PUT | `/api/Attraction/UpdateItem/{id}` | Ändrar en sevärdhets rubrik, beskrivning, kategori och adress/ort/land |
+| **Attraction** | DELETE | `/api/Attraction/DeleteItem/{id}` | Raderar en sevärdhet och kaskadraderar recensioner och kategorikopplingar |
+| **Rating** | POST | `/api/CustomerAttractionRating/CreateItem` | Lägger till en recension/kommentar kopplad till kund och sevärdhet |
+| **Rating** | DELETE | `/api/CustomerAttractionRating/DeleteItem` | Raderar en specifik recension/kommentar (`customerId` & `attractionId`) |
